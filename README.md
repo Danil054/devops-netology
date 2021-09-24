@@ -11,3 +11,4 @@
 файлы с расширением .terraformrc
 файл terraform.rc
 
+Новая строка
