@@ -26,10 +26,10 @@ end
 
 8.  
  history-size (1674 строчка)  
- ignoreboth - значение для переменной HISTCONTROL, оно эквиваленто двум значениям ignorespace (не сохранять в истории команд, которые начинались с пробела)  и ignoredups (не соранять повторные команды)
+ ignoreboth - значение для переменной HISTCONTROL, оно эквиваленто двум значениям ignorespace (не сохранять в истории команд, которые начинались с пробела)  и ignoredups (не сохранять повторные команды)
 
 9.  
-в составных командах, команды выполняются в текущем окружении оболочки.  
+В составных командах, команды выполняются в текущем окружении оболочки.  
 Говорится начиная со строчки 192:
 ```
  { list; }
@@ -115,7 +115,7 @@ sudo cp /bin/bash /usr/local/bin/
 Смотрим текущее значение переменной PATH:
 ```
 vagrant@vagrant:~/tst1$ env | grep PATH
-PATH=/tmp/new_path_directory:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 vagrant@vagrant:~/tst1$
 ```
 
