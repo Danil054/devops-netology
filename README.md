@@ -1,146 +1,118 @@
 1.  
-установлено  
- 
-2. 
-установлено  
- 
-3.  
-putty  
+```cd``` - судя по всему, внутренняя команда оболочки (shell-а) в моём случае bash,  
+ так как в системе нет программы/файла с именем cd, если бы был - то cd была бы отдельной программой.  
 
-4. 
-запущена ВМ  
+2.  
+```grep -c <some_string> <some_file>``` (выведет количество строк)  
+
+3.  
+```systemd```
+
+4.  
+```ls 2>/dev/pts/X ``` X - нужная сессия, в которую перенаправляем вывод ошибок  
 
 5.  
-2 CPU, 1Gb RAM, 64GB HDD (thin)  
- 
+можно, например: ```cat < file1 1>file2```
+
 6.  
-Изменить/добавить в Vagrantfile параметры v.memory и v.cpus:
-```
-config.vm.provider "virtualbox" do |v|
-  v.memory = 1024
-  v.cpus = 2
-end 
-```
+Получится, но наблюдать в графическом режиме выводимые данные - нет  
+нужно переключиться на tty для наблюдения.  
+
 7.  
-Подключились.  
+```
+vagrant@vagrant:~$
+vagrant@vagrant:~$ bash 5>&1
+vagrant@vagrant:~$
+vagrant@vagrant:~$ echo netology > /proc/$$/fd/5
+netology
+vagrant@vagrant:~$
+```
+сперва мы запустили bash и перенаправили 5й дескриптор на стандартный вывод (stdout)  
+после отправили "netology" в 5й дескриптор файла текущего процесса, и увидели отображение на экране, так как до этого сделали перенаправление.  
 
 8.  
- history-size (1674 строчка)  
- ignoreboth - значение для переменной HISTCONTROL, оно эквиваленто двум значениям ignorespace (не сохранять в истории команд, которые начинались с пробела)  и ignoredups (не сохранять повторные команды)
+Получится, например так:
+```
+vagrant@vagrant:~$
+vagrant@vagrant:~$ ls -la /home/vagrantkjhk/ 6>&2 2>&1 1>&6  | grep 'cannot'
+ls: cannot access '/home/vagrantkjhk/': No such file or directory
+vagrant@vagrant:~$
+```
+Что бы поменять потоки местами:  
+сперва временный/промежуточный дескриптор отправляем в stderr,  
+потом stderr отправляем в stdout  
+затем stdout во временный  
 
 9.  
-В составных командах, команды выполняются в текущем окружении оболочки.  
-Говорится начиная со строчки 192:
-```
- { list; }
-              list is simply executed in the current shell environment.  list must be terminated with a newline or semicolon.  This is known as a group command.  The return status is the exit status of list.  Note that unlike the metacharacters (
-              and ), { and } are reserved words and must occur where a reserved word is permitted to be recognized.  Since they do not cause a word break, they must be separated from list by whitespace or another shell metacharacter.
-```
-
-Так же фигурные скобки можно использовать как механизм генерирования строк, говорится начиная с 728 строки:
-```
- Brace Expansion
-       Brace expansion is a mechanism by which arbitrary strings may be generated.  This mechanism is similar to pathname expansion, but the filenames generated need not exist.  Patterns to be brace expanded take the form of an optional preamble,
-       followed  by either a series of comma-separated strings or a sequence expression between a pair of braces, followed by an optional postscript.  The preamble is prefixed to each string contained within the braces, and the postscript is then
-       appended to each resulting string, expanding left to right.
-
-       Brace expansions may be nested.  The results of each expanded string are not sorted; left to right order is preserved.  For example, a{d,c,b}e expands into `ade ace abe'.
-
-       A sequence expression takes the form {x..y[..incr]}, where x and y are either integers or single characters, and incr, an optional increment, is an integer.  When integers are supplied, the expression expands to each number between  x  and
-       y,  inclusive.   Supplied integers may be prefixed with 0 to force each term to have the same width.  When either x or y begins with a zero, the shell attempts to force all generated terms to contain the same number of digits, zero-padding
-       where necessary.  When characters are supplied, the expression expands to each character lexicographically between x and y, inclusive, using the default C locale.  Note that both x and y must be of the same type.   When  the  increment  is
-       supplied, it is used as the difference between each term.  The default increment is 1 or -1 as appropriate.
-
-       Brace  expansion  is performed before any other expansions, and any characters special to other expansions are preserved in the result.  It is strictly textual.  Bash does not apply any syntactic interpretation to the context of the expan‐
-       sion or the text between the braces.
-
-       A correctly-formed brace expansion must contain unquoted opening and closing braces, and at least one unquoted comma or a valid sequence expression.  Any incorrectly formed brace expansion is left unchanged.  A { or , may be quoted with  a
-       backslash to prevent its being considered part of a brace expression.  To avoid conflicts with parameter expansion, the string ${ is not considered eligible for brace expansion, and inhibits brace expansion until the closing }.
-
-       This construct is typically used as shorthand when the common prefix of the strings to be generated is longer than in the above example:
-
-              mkdir /usr/local/src/bash/{old,new,dist,bugs}
-       or
-              chown root /usr/{ucb/{ex,edit},lib/{ex?.?*,how_ex}}
-
-```
+выведет переменные окружения текущего процесса, так же можно получить командой ```env```  
 
 10.  
-Создать 100 000 файлов можно командой:
 ```
-touch file{1..100000}
+ /proc/[pid]/cmdline
+              This read-only file holds the complete command line for the process, unless the process is a zombie.  In the latter case, there is nothing in this file: that is, a read on this file will return 0 characters.  The command-line  argu‐
+              ments appear in this file as a set of strings separated by null bytes ('\0'), with a further null byte after the last string.
 ```
+Хранит командную строку, которая использовалась для запуска процесса.  
 
-300 000 файлов не даёт создать, выходит ошибка:
+
 ```
-vagrant@vagrant:~/tst1$ touch file{1..300000}
--bash: /usr/bin/touch: Argument list too long
+ /proc/[pid]/exe
+              Under Linux 2.2 and later, this file is a symbolic link containing the actual pathname of the executed command.  This symbolic link can be dereferenced normally; attempting to open it will open the executable.   You  can  even  type
+              /proc/[pid]/exe to run another copy of the same executable that is being run by process [pid].  If the pathname has been unlinked, the symbolic link will contain the string '(deleted)' appended to the original pathname.  In a multi‐
+              threaded process, the contents of this symbolic link are not available if the main thread has already terminated (typically by calling pthread_exit(3)).
+
+              Permission to dereference or read (readlink(2)) this symbolic link is governed by a ptrace access mode PTRACE_MODE_READ_FSCREDS check; see ptrace(2).
+
+              Under Linux 2.0 and earlier, /proc/[pid]/exe is a pointer to the binary which was executed, and appears as a symbolic link.  A readlink(2) call on this file under Linux 2.0 returns a string in the format:
+
+                  [device]:inode
+
+              For example, [0301]:1502 would be inode 1502 on device major 03 (IDE, MFM, etc. drives) minor 01 (first partition on the first drive).
+
+              find(1) with the -inum option can be used to locate the file.
 ```
-Похоже где-то задано максимальное количество аргументов, только вот и вопрос для чего именно и где задано :-)  
-Погуглил, имеется системная переменная ARG_MAX задающая максимальный размер строки аргументов  
-В нашей ВМ оно:
-```
-vagrant@vagrant:~$ getconf -a | grep ARG_MAX
-ARG_MAX                            2097152
-POSIX_ARG_MAX                     2097152
-```
-Видимо, строка в 300к аргументов превышает 2097152 байт
+Символическая ссылка содержащая путь к выполняемой команде.  
 
 11.  
-Конструкция [[ expression ]] - возвращает статус 0 или 1 в зависимости от раскрытия expression.  
-[[ -d /tmp ]] - вернёт "успешное завершение команды (или 0)" если файл /tmp  существует и это каталог, в противном случае вернет неуспешное завершение.  
-
-из мана:
 ```
--d file
-              True if file exists and is a directory
+vagrant@vagrant:~$ cat /proc/cpuinfo | grep -i SSE
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase avx2 invpcid rdseed clflushopt md_clear flush_l1d
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase avx2 invpcid rdseed clflushopt md_clear flush_l1d
+vagrant@vagrant:~$
 ```
+SSE4_2
 
 12.  
-Создаём директорию: 
-```
-vagrant@vagrant:~/tst1$ mkdir /tmp/new_path_directory/
-```
+В man ssh написано:  If a command is specified, it is executed on the remote host instead of a login shell  
+То есть при выполнении команды через ssh, она выполняется на удалённом хосте, но шелл не запускается, следовательно и нет tty.  
 
-Копируем туда bash:
+13.
+Сделал, доустановил пакет reptyr  
+При первой попытке перехватить PID из сеанса в screen ошибка вышла:  
 ```
-cp /bin/bash /tmp/new_path_directory/
+vagrant@vagrant:~$ reptyr 1733
+Unable to attach to pid 1733: Operation not permitted
+The kernel denied permission while attaching. If your uid matches
+the target's, check the value of /proc/sys/kernel/yama/ptrace_scope.
+For more information, see /etc/sysctl.d/10-ptrace.conf
 ```
-
-Копируем bash в /usr/local/bin/
-```
-sudo cp /bin/bash /usr/local/bin/
-```
-
-Смотрим текущее значение переменной PATH:
-```
-vagrant@vagrant:~/tst1$ env | grep PATH
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-vagrant@vagrant:~/tst1$
-```
-
-Меняем значение, добавив вначале путь до нашей директории:
-```
-vagrant@vagrant:~/tst1$ PATH=/tmp/new_path_directory:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-vagrant@vagrant:~/tst1$
-```
-
-Выводим пути для bash:
-```
-vagrant@vagrant:~/tst1$ type -a bash
-bash is /tmp/new_path_directory/bash
-bash is /usr/local/bin/bash
-bash is /usr/bin/bash
-bash is /bin/bash
-vagrant@vagrant:~/tst1$
-```
-
-13.  
-at - выполнение команд по времени  
-batch -  выполнение команд, если допустимый уровень загрузки системы  
+Из конфига понятно, что можно поменять значение параметра kernel.yama.ptrace_scope на 0  
+После смены значения на 0  (повысился до рута и отправил 0 в /proc/sys/kernel/yama/ptrace_scope )  ```echo 0 > /proc/sys/kernel/yama/ptrace_scope```  
+удалось перехватить процесс.  
 
 14.  
-vagrant halt  - выключаем ВМ.  
+Из мана:
+```
+NAME
+       tee - read from standard input and write to standard output and files
+```
+читает стандартный ввод и пишет в стандартный вывод.
+``` echo string | sudo tee /root/new_file ``` будет работать, так как сама команда tee запущена через sudo и будет иметь права на запись в /root/new_file,  
+в отличие от ``` sudo echo string > /root/new_file```, где перенаправление запускается в шеле, который запущен без sudo.
+
+
+
+
 
 
 
