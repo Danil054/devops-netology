@@ -1,118 +1,107 @@
 1.  
-```cd``` - судя по всему, внутренняя команда оболочки (shell-а) в моём случае bash,  
- так как в системе нет программы/файла с именем cd, если бы был - то cd была бы отдельной программой.  
+Запускаем strace, для удобства поиска перенаправляем её вывод в файл:  
+``` strace -f /bin/bash -c 'cd /tmp' 2>strace.log ```
+После в файле strace.log видим, что для смены директории запускается вызов chdir:  
+```
+stat("/tmp", {st_mode=S_IFDIR|S_ISVTX|0777, st_size=4096, ...}) = 0
+chdir("/tmp")                           = 0
+```
 
 2.  
-```grep -c <some_string> <some_file>``` (выведет количество строк)  
+
+Судя по блоку из strace:  
+```
+stat("/root/.magic.mgc", 0x7ffdee881450) = -1 ENOENT (No such file or directory)
+stat("/root/.magic", 0x7ffdee881450)    = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/magic.mgc", O_RDONLY) = -1 ENOENT (No such file or directory)
+stat("/etc/magic", {st_mode=S_IFREG|0644, st_size=111, ...}) = 0
+openat(AT_FDCWD, "/etc/magic", O_RDONLY) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=111, ...}) = 0
+read(3, "# Magic local data for file(1) c"..., 4096) = 111
+read(3, "", 4096)                       = 0
+close(3)                                = 0
+openat(AT_FDCWD, "/usr/share/misc/magic.mgc", O_RDONLY) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=5811536, ...}) = 0
+```
+
+Команда file в конечном итоге использует файлы:  
+```
+/etc/magic
+/usr/share/misc/magic.mgc
+```
 
 3.  
-```systemd```
+С помощью lsof находим процесс, который пишет в удалённый файл.  
+После, по PID процесса находим файловый дескриптор в /proc/PID/fd/ , удалённого файла (командой ls -la)  
+И обнуляем его ``` echo "" > /proc/PID/fd/FDESCRIPTOR ```  
 
 4.  
-```ls 2>/dev/pts/X ``` X - нужная сессия, в которую перенаправляем вывод ошибок  
+Нет, они занимают только строки в таблице процессов ядра.  
 
 5.  
-можно, например: ```cat < file1 1>file2```
-
+```
+root@vagrant:/etc# /usr/sbin/opensnoop-bpfcc
+PID    COMM               FD ERR PATH
+788    vminfo              4   0 /var/run/utmp
+590    dbus-daemon        -1   2 /usr/local/share/dbus-1/system-services
+590    dbus-daemon        18   0 /usr/share/dbus-1/system-services
+590    dbus-daemon        -1   2 /lib/dbus-1/system-services
+590    dbus-daemon        18   0 /var/lib/snapd/dbus-1/system-services/
+610    irqbalance          6   0 /proc/interrupts
+610    irqbalance          6   0 /proc/stat
+610    irqbalance          6   0 /proc/irq/20/smp_affinity
+610    irqbalance          6   0 /proc/irq/0/smp_affinity
+610    irqbalance          6   0 /proc/irq/1/smp_affinity
+610    irqbalance          6   0 /proc/irq/8/smp_affinity
+610    irqbalance          6   0 /proc/irq/12/smp_affinity
+610    irqbalance          6   0 /proc/irq/14/smp_affinity
+610    irqbalance          6   0 /proc/irq/15/smp_affinity
+```
 6.  
-Получится, но наблюдать в графическом режиме выводимые данные - нет  
-нужно переключиться на tty для наблюдения.  
+Вызов uname  
+В ```  man 2 uname ``` (пришлось доустановить пакет manpages-dev ) видно:  
+```
+Part of the utsname information is also accessible via /proc/sys/kernel/{ostype, hostname, osrelease, version, domainname}
+```
 
 7.  
+```;``` - последовательное выполнение команд  
+```&&``` - выполнение следующей команды, только если результат первой успешен(0)  
+
+Есть ли смысл использовать в bash &&, если применить set -e  
+Из ```bash -c "help set"```  
+
+``` 
+ -e  Exit immediately if a command exits with a non-zero status
 ```
-vagrant@vagrant:~$
-vagrant@vagrant:~$ bash 5>&1
-vagrant@vagrant:~$
-vagrant@vagrant:~$ echo netology > /proc/$$/fd/5
-netology
-vagrant@vagrant:~$
-```
-сперва мы запустили bash и перенаправили 5й дескриптор на стандартный вывод (stdout)  
-после отправили "netology" в 5й дескриптор файла текущего процесса, и увидели отображение на экране, так как до этого сделали перенаправление.  
+Видимо есть, так как при ```set -e``` произойдёт выход при неуспешности команды, а при использовании ```&&``` команда просто не выполнится.  
 
 8.  
-Получится, например так:
+
 ```
-vagrant@vagrant:~$
-vagrant@vagrant:~$ ls -la /home/vagrantkjhk/ 6>&2 2>&1 1>&6  | grep 'cannot'
-ls: cannot access '/home/vagrantkjhk/': No such file or directory
-vagrant@vagrant:~$
+ -e  Exit immediately if a command exits with a non-zero status
+ -u  Treat unset variables as an error when substituting.
+ -x  Print commands and their arguments as they are executed.
+ -o pipefail - the return value of a pipeline is the status of
+                           the last command to exit with a non-zero status,
+                           or zero if no command exited with a non-zero status
 ```
-Что бы поменять потоки местами:  
-сперва временный/промежуточный дескриптор отправляем в stderr,  
-потом stderr отправляем в stdout  
-затем stdout во временный  
+Для скриптов по мне так: удобство в выводе команд и аргументов и выход при неуспешности команды.  
+А вот  -u и -o pipefail - в чём удобство?  
+
 
 9.  
-выведет переменные окружения текущего процесса, так же можно получить командой ```env```  
-
-10.  
+Самый часто встречающийся статус процессов: ``S`` (interruptible sleep (waiting for an event to complete))  
+Дополнительные буквы к основной, это для BSD формата:  
 ```
- /proc/[pid]/cmdline
-              This read-only file holds the complete command line for the process, unless the process is a zombie.  In the latter case, there is nothing in this file: that is, a read on this file will return 0 characters.  The command-line  argu‐
-              ments appear in this file as a set of strings separated by null bytes ('\0'), with a further null byte after the last string.
+For BSD formats and when the stat keyword is used, additional characters may be displayed:
+
+               <    high-priority (not nice to other users)
+               N    low-priority (nice to other users)
+               L    has pages locked into memory (for real-time and custom IO)
+               s    is a session leader
+               l    is multi-threaded (using CLONE_THREAD, like NPTL pthreads do)
+               +    is in the foreground process group
 ```
-Хранит командную строку, которая использовалась для запуска процесса.  
-
-
-```
- /proc/[pid]/exe
-              Under Linux 2.2 and later, this file is a symbolic link containing the actual pathname of the executed command.  This symbolic link can be dereferenced normally; attempting to open it will open the executable.   You  can  even  type
-              /proc/[pid]/exe to run another copy of the same executable that is being run by process [pid].  If the pathname has been unlinked, the symbolic link will contain the string '(deleted)' appended to the original pathname.  In a multi‐
-              threaded process, the contents of this symbolic link are not available if the main thread has already terminated (typically by calling pthread_exit(3)).
-
-              Permission to dereference or read (readlink(2)) this symbolic link is governed by a ptrace access mode PTRACE_MODE_READ_FSCREDS check; see ptrace(2).
-
-              Under Linux 2.0 and earlier, /proc/[pid]/exe is a pointer to the binary which was executed, and appears as a symbolic link.  A readlink(2) call on this file under Linux 2.0 returns a string in the format:
-
-                  [device]:inode
-
-              For example, [0301]:1502 would be inode 1502 on device major 03 (IDE, MFM, etc. drives) minor 01 (first partition on the first drive).
-
-              find(1) with the -inum option can be used to locate the file.
-```
-Символическая ссылка содержащая путь к выполняемой команде.  
-
-11.  
-```
-vagrant@vagrant:~$ cat /proc/cpuinfo | grep -i SSE
-flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase avx2 invpcid rdseed clflushopt md_clear flush_l1d
-flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase avx2 invpcid rdseed clflushopt md_clear flush_l1d
-vagrant@vagrant:~$
-```
-SSE4_2
-
-12.  
-В man ssh написано:  If a command is specified, it is executed on the remote host instead of a login shell  
-То есть при выполнении команды через ssh, она выполняется на удалённом хосте, но шелл не запускается, следовательно и нет tty.  
-
-13.
-Сделал, доустановил пакет reptyr  
-При первой попытке перехватить PID из сеанса в screen ошибка вышла:  
-```
-vagrant@vagrant:~$ reptyr 1733
-Unable to attach to pid 1733: Operation not permitted
-The kernel denied permission while attaching. If your uid matches
-the target's, check the value of /proc/sys/kernel/yama/ptrace_scope.
-For more information, see /etc/sysctl.d/10-ptrace.conf
-```
-Из конфига понятно, что можно поменять значение параметра kernel.yama.ptrace_scope на 0  
-После смены значения на 0  (повысился до рута и отправил 0 в /proc/sys/kernel/yama/ptrace_scope )  ```echo 0 > /proc/sys/kernel/yama/ptrace_scope```  
-удалось перехватить процесс.  
-
-14.  
-Из мана:
-```
-NAME
-       tee - read from standard input and write to standard output and files
-```
-читает стандартный ввод и пишет в стандартный вывод.
-``` echo string | sudo tee /root/new_file ``` будет работать, так как сама команда tee запущена через sudo и будет иметь права на запись в /root/new_file,  
-в отличие от ``` sudo echo string > /root/new_file```, где перенаправление запускается в шеле, который запущен без sudo.
-
-
-
-
-
 
 
