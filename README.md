@@ -1,107 +1,120 @@
 1.  
-Запускаем strace, для удобства поиска перенаправляем её вывод в файл:  
-``` strace -f /bin/bash -c 'cd /tmp' 2>strace.log ```
-После в файле strace.log видим, что для смены директории запускается вызов chdir:  
+Скачал и распаковал node_exporter в /opt/node_exporter/  
+Создал в /etc/systemd/system/ файл node_exporter.service  
+с содержимым:  
 ```
-stat("/tmp", {st_mode=S_IFDIR|S_ISVTX|0777, st_size=4096, ...}) = 0
-chdir("/tmp")                           = 0
+[Unit]
+Description=Node_Exporter autostart
+
+[Service]
+EnvironmentFile=-/etc/default/node_exporter
+ExecStart=/opt/node_exporter/node_exporter $NODE_EXPORTER_OPTS
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target
 ```
+
+Почему, в документации написано, что не рекомендовано использовать ```KillMode=process```  
+Но, посмотрел файлы описания для того же ssh или cron многие используют  KillMode=process  
+?  
+
+Перечитал файлы: ```systemctl daemon-reload```  
+После этого запускается и останавливается node_exporter через systemctl, и стартует после перезагрузки ОС.  
+
 
 2.  
-
-Судя по блоку из strace:  
+Для процессора:  
 ```
-stat("/root/.magic.mgc", 0x7ffdee881450) = -1 ENOENT (No such file or directory)
-stat("/root/.magic", 0x7ffdee881450)    = -1 ENOENT (No such file or directory)
-openat(AT_FDCWD, "/etc/magic.mgc", O_RDONLY) = -1 ENOENT (No such file or directory)
-stat("/etc/magic", {st_mode=S_IFREG|0644, st_size=111, ...}) = 0
-openat(AT_FDCWD, "/etc/magic", O_RDONLY) = 3
-fstat(3, {st_mode=S_IFREG|0644, st_size=111, ...}) = 0
-read(3, "# Magic local data for file(1) c"..., 4096) = 111
-read(3, "", 4096)                       = 0
-close(3)                                = 0
-openat(AT_FDCWD, "/usr/share/misc/magic.mgc", O_RDONLY) = 3
-fstat(3, {st_mode=S_IFREG|0644, st_size=5811536, ...}) = 0
+process_cpu_seconds_total
+все для:
+node_cpu_seconds_total
 ```
 
-Команда file в конечном итоге использует файлы:  
+Для оперативки:  
 ```
-/etc/magic
-/usr/share/misc/magic.mgc
+node_memory_Active_bytes
+node_memory_Cached_bytes
+node_memory_MemAvailable_bytes
+node_memory_MemFree_bytes
+node_memory_MemTotal_bytes
 ```
+
+Для дисков:  
+```
+node_disk_io_now (для нужных дисков)
+node_filesystem_free_bytes (по всем ФС)
+```
+Не совсем понял какие метрики подойдут для отоброжения скорости чтения и записи для дисков?  
+
+Для сети:  
+```
+node_network_receive_errs_total
+node_network_transmit_errs_total
+node_network_receive_bytes_total
+node_network_transmit_bytes_total
+node_network_speed_bytes
+node_network_receive_drop_total
+node_network_transmit_drop_total
+```
+Так же, не совсем понял скорость как снять?  
 
 3.  
-С помощью lsof находим процесс, который пишет в удалённый файл.  
-После, по PID процесса находим файловый дескриптор в /proc/PID/fd/ , удалённого файла (командой ls -la)  
-И обнуляем его ``` echo "" > /proc/PID/fd/FDESCRIPTOR ```  
+ Собирает метрики по cpu, load average, disk, ram, swap, network, processes, idlejitter, interrupts, softirqs, softnet, entropy, uptime, ipc semaphores, ipc shared memory  
 
 4.  
-Нет, они занимают только строки в таблице процессов ядра.  
+```
+root@vagrant:/etc/netdata# dmesg | grep virt
+[    0.002315] CPU MTRRs all blank - virtualized system.
+[    0.072909] Booting paravirtualized kernel on KVM
+[    2.611103] systemd[1]: Detected virtualization oracle.
+```
+Видимо да.  
 
 5.  
 ```
-root@vagrant:/etc# /usr/sbin/opensnoop-bpfcc
-PID    COMM               FD ERR PATH
-788    vminfo              4   0 /var/run/utmp
-590    dbus-daemon        -1   2 /usr/local/share/dbus-1/system-services
-590    dbus-daemon        18   0 /usr/share/dbus-1/system-services
-590    dbus-daemon        -1   2 /lib/dbus-1/system-services
-590    dbus-daemon        18   0 /var/lib/snapd/dbus-1/system-services/
-610    irqbalance          6   0 /proc/interrupts
-610    irqbalance          6   0 /proc/stat
-610    irqbalance          6   0 /proc/irq/20/smp_affinity
-610    irqbalance          6   0 /proc/irq/0/smp_affinity
-610    irqbalance          6   0 /proc/irq/1/smp_affinity
-610    irqbalance          6   0 /proc/irq/8/smp_affinity
-610    irqbalance          6   0 /proc/irq/12/smp_affinity
-610    irqbalance          6   0 /proc/irq/14/smp_affinity
-610    irqbalance          6   0 /proc/irq/15/smp_affinity
+root@vagrant:/etc/netdata# sysctl -a | grep fs.nr_open
+fs.nr_open = 1048576
 ```
+Означает максимальное количество открытых файловых дескрипторов.  
+
+Не дас открыть столько ограничение в ulimit:  
+```
+  -n        the maximum number of open file descriptors
+```
+сейчас установлен в:  
+```
+root@vagrant:/etc/sysctl.d# ulimit -n
+1024
+```
+
 6.  
-Вызов uname  
-В ```  man 2 uname ``` (пришлось доустановить пакет manpages-dev ) видно:  
+Переходим в screen, там:  
 ```
-Part of the utsname information is also accessible via /proc/sys/kernel/{ostype, hostname, osrelease, version, domainname}
+root@vagrant:/etc/sysctl.d# unshare -f --pid --mount-proc /bin/bash
+запускаем sleep 1h
+```
+
+После в "хвостовом" нэймспейсе:  
+```
+root@vagrant:/home/vagrant# ps aux  | grep sleep
+root        2868  0.0  0.0   8076   592 pts/2    S+   07:06   0:00 sleep 1h
+root        3114  0.0  0.0   8900   740 pts/3    S+   07:23   0:00 grep --color=auto sleep
+root@vagrant:/home/vagrant#
+root@vagrant:/home/vagrant# nsenter --target 2868 --pid --mount
+root@vagrant:/# ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.4   9836  4048 pts/2    S    07:05   0:00 /bin/bash
+root           9  0.0  0.0   8076   592 pts/2    S+   07:06   0:00 sleep 1h
+root          10  0.0  0.4   9836  4140 pts/3    S    07:23   0:00 -bash
+root          19  0.0  0.3  11492  3388 pts/3    R+   07:23   0:00 ps aux
+root@vagrant:/#
 ```
 
 7.  
-```;``` - последовательное выполнение команд  
-```&&``` - выполнение следующей команды, только если результат первой успешен(0)  
 
-Есть ли смысл использовать в bash &&, если применить set -e  
-Из ```bash -c "help set"```  
-
-``` 
- -e  Exit immediately if a command exits with a non-zero status
+породит процессы до kernel смерти :-)  
+отработал "pids controller" :  
 ```
-Видимо есть, так как при ```set -e``` произойдёт выход при неуспешности команды, а при использовании ```&&``` команда просто не выполнится.  
-
-8.  
-
+[Thu Oct 28 07:27:27 2021] cgroup: fork rejected by pids controller in /user.slice/user-1000.slice/session-7.scope
 ```
- -e  Exit immediately if a command exits with a non-zero status
- -u  Treat unset variables as an error when substituting.
- -x  Print commands and their arguments as they are executed.
- -o pipefail - the return value of a pipeline is the status of
-                           the last command to exit with a non-zero status,
-                           or zero if no command exited with a non-zero status
-```
-Для скриптов по мне так: удобство в выводе команд и аргументов и выход при неуспешности команды.  
-А вот  -u и -o pipefail - в чём удобство?  
-
-
-9.  
-Самый часто встречающийся статус процессов: ``S`` (interruptible sleep (waiting for an event to complete))  
-Дополнительные буквы к основной, это для BSD формата:  
-```
-For BSD formats and when the stat keyword is used, additional characters may be displayed:
-
-               <    high-priority (not nice to other users)
-               N    low-priority (nice to other users)
-               L    has pages locked into memory (for real-time and custom IO)
-               s    is a session leader
-               l    is multi-threaded (using CLONE_THREAD, like NPTL pthreads do)
-               +    is in the foreground process group
-```
-
-
