@@ -1,12 +1,13 @@
 1.  
+Sparse-файл, это файл в котором последовательность нулевых байтов, заменены информацией о этой последовательности, тем самым позволяя занимать меньше дискового пространства.  
 
-Sparse-файл, эьл файл в котором последовательность нулевых байтов, заменены информацией о этой последовательности, тем самым позволяя занимать меньше дискового пространства.  
 
 2.  
-
 Нет, так как inode один для всех хардлинков на файл.  
 
+
 3.  
+Запускаемся:  
 ```
 d:\vm\vagrant>vagrant up
 Bringing machine 'default' up with 'virtualbox' provider...
@@ -38,11 +39,10 @@ Bringing machine 'default' up with 'virtualbox' provider...
     default: /vagrant => D:/vm/vagrant
 
 d:\vm\vagrant>
-
 ```
 
-4.  
 
+4.  
 Разбиваем первый доп. диск (``` fdisk /dev/sdb ``` ):  
 
 ```
@@ -83,10 +83,6 @@ Calling ioctl() to re-read partition table.
 Syncing disks.
 
 root@vagrant:/home/vagrant#
-
-
-
-
 root@vagrant:/home/vagrant# fdisk -l /dev/sdb
 Disk /dev/sdb: 2.51 GiB, 2684354560 bytes, 5242880 sectors
 Disk model: VBOX HARDDISK
@@ -100,8 +96,8 @@ Device     Boot   Start     End Sectors  Size Id Type
 /dev/sdb1          2048 4196351 4194304    2G 83 Linux
 /dev/sdb2       4196352 5242879 1046528  511M 83 Linux
 root@vagrant:/home/vagrant#
-
 ```
+
 
 5.  
 Копируем таблицу разделов с перого на второй доп. диск:  
@@ -139,6 +135,7 @@ Syncing disks.
 root@vagrant:/home/vagrant#
 ```
 
+
 6.  
 Создаём рэйд зеркало:  
 ```
@@ -156,6 +153,7 @@ mdadm: array /dev/md0 started.
 root@vagrant:/home/vagrant#
 ```
 
+
 7.  
 Создаём страйп:  
 ```
@@ -166,6 +164,7 @@ mdadm: Defaulting to version 1.2 metadata
 mdadm: array /dev/md1 started.
 root@vagrant:/home/vagrant#
 ```
+
 
 8.  
 Создаём физич тома для LVM:  
@@ -178,6 +177,7 @@ root@vagrant:/home/vagrant# pvcreate /dev/md1
 root@vagrant:/home/vagrant#
 ```
 
+
 9.  
 Создаём LVM группу:  
 ```
@@ -187,6 +187,7 @@ root@vagrant:/home/vagrant# vgcreate lvmgrp1 /dev/md0 /dev/md1
 root@vagrant:/home/vagrant# 
 ```
 
+
 10.  
 Создаём LV на RAID0:  
 ```
@@ -195,8 +196,9 @@ root@vagrant:/home/vagrant# lvcreate -L100M lvmgrp1 /dev/md1
 root@vagrant:/home/vagrant#
 ```
 
+
 11.  
-Создаём файловую систему на LV:
+Создаём файловую систему на LV:  
 ```
 root@vagrant:/home/vagrant# mkfs.ext4 /dev/lvmgrp1/lvol0
 mke2fs 1.45.5 (07-Jan-2020)
@@ -210,6 +212,7 @@ Writing superblocks and filesystem accounting information: done
 root@vagrant:/home/vagrant#
 ```
 
+
 12.  
 Монтируем:  
 ```
@@ -217,8 +220,8 @@ root@vagrant:/home/vagrant#
 root@vagrant:/home/vagrant# mkdir /tmp/new
 root@vagrant:/home/vagrant# mount /dev/lvmgrp1/lvol0 /tmp/new
 root@vagrant:/home/vagrant#
-
 ```
+
 
 13.  
 Размещаем файл:  
@@ -237,6 +240,7 @@ Saving to: ‘/tmp/new/test.gz’
 
 root@vagrant:/home/vagrant#
 ```
+
 
 14.  
 Вывод lsblk:  
@@ -265,6 +269,7 @@ sdc                    8:32   0  2.5G  0 disk
 root@vagrant:/home/vagrant#
 ```
 
+
 15.  
 Тестируем целостность:  
 ```
@@ -275,6 +280,7 @@ root@vagrant:/home/vagrant# echo $?
 root@vagrant:/home/vagrant#
 ```
 
+
 16.  
 Перемещаем:  
 ```
@@ -283,6 +289,7 @@ root@vagrant:/home/vagrant# pvmove /dev/md1 /dev/md0
   /dev/md1: Moved: 100.00%
 root@vagrant:/home/vagrant#
 ```
+
 
 17.  
 Делаем сбой одного из дисков  врейде:  
@@ -293,12 +300,14 @@ mdadm: set /dev/sdb1 faulty in /dev/md0
 root@vagrant:/home/vagrant#
 ```
 
+
 18.  
 Наблюдаем в выводе dmesg:  
 ```
 [ 2639.768098] md/raid1:md0: Disk failure on sdb1, disabling device.
                md/raid1:md0: Operation continuing on 1 devices.
 ```
+
 
 19.  
 Проверяем уелостность:  
@@ -309,6 +318,7 @@ root@vagrant:/home/vagrant# echo $?
 0
 root@vagrant:/home/vagrant#
 ```
+
 
 20.  
 Уничтожаем чего вагрант насоздавал:
