@@ -35,7 +35,7 @@ root@lin-tst2:~#
 2.  
 В первом ответе получили код 301 ```Status Code: 301 Moved Permanently```  
 Судя по всему самое долго обрабатывался следующий. после получения кода об редиректе (так как потрачено время на инициализацию соединения)  
-см. скриншот:  (https://github.com/Danil054/devops-netology/pics/f12-net.png)   
+см. скриншот:  (https://github.com/Danil054/devops-netology/blob/main/pics/f12-net.png)   
 
 
 3.  
