@@ -1,337 +1,344 @@
 1.  
-Sparse-файл, это файл в котором последовательность нулевых байтов, заменены информацией о этой последовательности, тем самым позволяя занимать меньше дискового пространства.  
+Получили код 301 - Постоянный редирект  
+```
+root@lin-tst2:~# telnet stackoverflow.com 80
+Trying 151.101.1.69...
+Connected to stackoverflow.com.
+Escape character is '^]'.
+GET /questions HTTP/1.0
+HOST: stackoverflow.com
+
+
+HTTP/1.1 301 Moved Permanently
+cache-control: no-cache, no-store, must-revalidate
+location: https://stackoverflow.com/questions
+x-request-guid: 02a361f5-766c-41b6-bd1e-88114992a5e8
+feature-policy: microphone 'none'; speaker 'none'
+content-security-policy: upgrade-insecure-requests; frame-ancestors 'self' https://stackexchange.com
+Accept-Ranges: bytes
+Date: Tue, 16 Nov 2021 07:03:35 GMT
+Via: 1.1 varnish
+Connection: close
+X-Served-By: cache-fra19160-FRA
+X-Cache: MISS
+X-Cache-Hits: 0
+X-Timer: S1637046215.085295,VS0,VE92
+Vary: Fastly-SSL
+X-DNS-Prefetch-Control: off
+Set-Cookie: prov=56c8c277-a71f-6f6f-f29e-a1c4e469bd0b; domain=.stackoverflow.com; expires=Fri, 01-Jan-2055 00:00:00 GMT; path=/; HttpOnly
+
+Connection closed by foreign host.
+root@lin-tst2:~#
+```
 
 
 2.  
-Нет, так как inode один для всех хардлинков на файл.  
+В первом ответе получили код 301 ```Status Code: 301 Moved Permanently```  
+Судя по всему самое долго обрабатывался следующий. после получения кода об редиректе (так как потрачено время на инициализацию соединения)  
+см. скриншот:  (https://github.com/Danil054/devops-netology/pics/f12-net.png)   
 
 
 3.  
-Запускаемся:  
+91.207.82.13  
 ```
-d:\vm\vagrant>vagrant up
-Bringing machine 'default' up with 'virtualbox' provider...
-==> default: Importing base box 'bento/ubuntu-20.04'...
-==> default: Matching MAC address for NAT networking...
-==> default: Checking if box 'bento/ubuntu-20.04' version '202107.28.0' is up to date...
-==> default: Setting the name of the VM: vagrant_default_1635481179786_62305
-==> default: Clearing any previously set network interfaces...
-==> default: Preparing network interfaces based on configuration...
-    default: Adapter 1: nat
-==> default: Forwarding ports...
-    default: 22 (guest) => 2222 (host) (adapter 1)
-==> default: Running 'pre-boot' VM customizations...
-==> default: Booting VM...
-==> default: Waiting for machine to boot. This may take a few minutes...
-    default: SSH address: 127.0.0.1:2222
-    default: SSH username: vagrant
-    default: SSH auth method: private key
-    default:
-    default: Vagrant insecure key detected. Vagrant will automatically replace
-    default: this with a newly generated keypair for better security.
-    default:
-    default: Inserting generated public key within guest...
-    default: Removing insecure key from the guest if it's present...
-    default: Key inserted! Disconnecting and reconnecting using new SSH key...
-==> default: Machine booted and ready!
-==> default: Checking for guest additions in VM...
-==> default: Mounting shared folders...
-    default: /vagrant => D:/vm/vagrant
-
-d:\vm\vagrant>
+root@lin-tst2:~/gitrepo/devops-netology# curl 2ip.ru
+91.207.82.13
+root@lin-tst2:~/gitrepo/devops-netology#
 ```
 
 
-4.  
-Разбиваем первый доп. диск (``` fdisk /dev/sdb ``` ):  
-
+4  
+ Far-Eastern Distribution Company JSC  
+ AS48058  
 ```
-Command (m for help): p
-Disk /dev/sdb: 2.51 GiB, 2684354560 bytes, 5242880 sectors
-Disk model: VBOX HARDDISK
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: dos
-Disk identifier: 0x08ab6673
+root@lin-tst2:~/gitrepo/devops-netology# whois 91.207.82.13
+% This is the RIPE Database query service.
+% The objects are in RPSL format.
+%
+% The RIPE Database is subject to Terms and Conditions.
+% See http://www.ripe.net/db/support/db-terms-conditions.pdf
 
-Command (m for help): n
-Partition type
-   p   primary (0 primary, 0 extended, 4 free)
-   e   extended (container for logical partitions)
-Select (default p): p
-Partition number (1-4, default 1): 1
-First sector (2048-5242879, default 2048):
-Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-5242879, default 5242879): +2G
+% Note: this output has been filtered.
+%       To receive output for a database update, use the "-B" flag.
 
-Created a new partition 1 of type 'Linux' and of size 2 GiB.
+% Information related to '91.207.82.0 - 91.207.83.255'
 
-Command (m for help): n
-Partition type
-   p   primary (1 primary, 0 extended, 3 free)
-   e   extended (container for logical partitions)
-Select (default p): p
-Partition number (2-4, default 2): 2
-First sector (4196352-5242879, default 4196352):
-Last sector, +/-sectors or +/-size{K,M,G,T,P} (4196352-5242879, default 5242879):
+% Abuse contact for '91.207.82.0 - 91.207.83.255' is 'abuse@drsk.ru'
 
-Created a new partition 2 of type 'Linux' and of size 511 MiB.
+inetnum:        91.207.82.0 - 91.207.83.255
+netname:        DRSK-NET
+country:        RU
+org:            ORG-FDCJ1-RIPE
+admin-c:        DRSK1-RIPE
+tech-c:         DRSK1-RIPE
+status:         ASSIGNED PI
+mnt-by:         MNT-DRSK
+mnt-by:         RIPE-NCC-END-MNT
+mnt-routes:     MNT-DRSK
+mnt-domains:    MNT-DRSK
+created:        2008-10-02T11:29:54Z
+last-modified:  2019-05-28T09:55:31Z
+source:         RIPE # Filtered
+sponsoring-org: ORG-CS216-RIPE
 
-Command (m for help): w
-The partition table has been altered.
-Calling ioctl() to re-read partition table.
-Syncing disks.
+organisation:   ORG-FDCJ1-RIPE
+org-name:       Far-Eastern Distribution Company JSC.
+org-type:       OTHER
+address:        Russia, Amurskaya obl., Blagoveschensk, Shevchenko str., 28
+abuse-c:        DRSK1-RIPE
+mnt-ref:        MNT-DRSK
+mnt-by:         MNT-DRSK
+created:        2008-07-30T08:33:27Z
+last-modified:  2014-11-18T09:52:52Z
+source:         RIPE # Filtered
 
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# fdisk -l /dev/sdb
-Disk /dev/sdb: 2.51 GiB, 2684354560 bytes, 5242880 sectors
-Disk model: VBOX HARDDISK
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: dos
-Disk identifier: 0x08ab6673
+role:           DRSK NOC
+abuse-mailbox:  abuse@drsk.ru
+address:        28, Shevchenko st
+address:        675000 Blagoveschensk Russia
+admin-c:        NSA10-RIPE
+tech-c:         YBT1-RIPE
+nic-hdl:        DRSK1-RIPE
+mnt-by:         MNT-DRSK
+created:        2008-10-06T13:09:28Z
+last-modified:  2014-11-18T09:49:51Z
+source:         RIPE # Filtered
 
-Device     Boot   Start     End Sectors  Size Id Type
-/dev/sdb1          2048 4196351 4194304    2G 83 Linux
-/dev/sdb2       4196352 5242879 1046528  511M 83 Linux
-root@vagrant:/home/vagrant#
+% Information related to '91.207.82.0/24AS48058'
+
+route:          91.207.82.0/24
+origin:         AS48058
+mnt-by:         MNT-DRSK
+created:        2017-10-05T02:23:49Z
+last-modified:  2017-10-05T02:23:49Z
+source:         RIPE
+
+% This query was served by the RIPE Database Query Service version 1.101 (ANGUS)
+
+
+root@lin-tst2:~/gitrepo/devops-netology#
 ```
+p.s.  
+Это на работе, у нас свой небольшой (/23) блок адресов  
 
 
 5.  
-Копируем таблицу разделов с перого на второй доп. диск:  
 ```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# sfdisk -d /dev/sdb | sfdisk /dev/sdc
-Checking that no-one is using this disk right now ... OK
-
-Disk /dev/sdc: 2.51 GiB, 2684354560 bytes, 5242880 sectors
-Disk model: VBOX HARDDISK
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-
->>> Script header accepted.
->>> Script header accepted.
->>> Script header accepted.
->>> Script header accepted.
->>> Created a new DOS disklabel with disk identifier 0x08ab6673.
-/dev/sdc1: Created a new partition 1 of type 'Linux' and of size 2 GiB.
-/dev/sdc2: Created a new partition 2 of type 'Linux' and of size 511 MiB.
-/dev/sdc3: Done.
-
-New situation:
-Disklabel type: dos
-Disk identifier: 0x08ab6673
-
-Device     Boot   Start     End Sectors  Size Id Type
-/dev/sdc1          2048 4196351 4194304    2G 83 Linux
-/dev/sdc2       4196352 5242879 1046528  511M 83 Linux
-
-The partition table has been altered.
-Calling ioctl() to re-read partition table.
-Syncing disks.
-root@vagrant:/home/vagrant#
+root@lin-tst2:~/gitrepo/devops-netology# traceroute -An 8.8.8.8
+traceroute to 8.8.8.8 (8.8.8.8), 30 hops max, 60 byte packets
+ 1  10.74.9.254 [*]  0.422 ms  0.264 ms  0.220 ms
+ 2  91.207.82.1 [AS48058]  4.569 ms  4.576 ms  4.485 ms
+ 3  85.140.127.5 [AS39811]  4.825 ms  4.868 ms  5.037 ms
+ 4  85.140.127.161 [AS39811]  4.528 ms  4.820 ms  4.853 ms
+ 5  212.188.22.198 [AS8359]  5.131 ms  4.961 ms  4.967 ms
+ 6  212.188.2.105 [AS8359]  105.190 ms  102.093 ms  102.207 ms
+ 7  212.188.55.161 [AS8359]  13.091 ms  12.942 ms  13.453 ms
+ 8  212.188.1.201 [AS8359]  31.651 ms  31.546 ms  32.353 ms
+ 9  212.188.55.113 [AS8359]  96.757 ms  96.696 ms  96.725 ms
+10  212.188.42.177 [AS8359]  48.519 ms  48.437 ms  48.651 ms
+11  212.188.42.149 [AS8359]  69.410 ms  69.607 ms  67.946 ms
+12  212.188.29.85 [AS8359]  83.660 ms  83.686 ms  83.665 ms
+13  195.34.50.161 [AS8359]  96.522 ms  96.476 ms  96.484 ms
+14  212.188.29.82 [AS8359]  96.130 ms  96.409 ms  96.420 ms
+15  108.170.250.34 [AS15169]  94.968 ms 108.170.250.99 [AS15169]  95.037 ms 108.170.250.83 [AS15169]  95.176 ms
+16  * 142.251.49.24 [AS15169]  118.551 ms 209.85.255.136 [AS15169]  121.567 ms
+17  72.14.238.168 [AS15169]  118.822 ms 216.239.57.222 [AS15169]  117.386 ms 72.14.238.168 [AS15169]  126.026 ms
+18  216.239.63.65 [AS15169]  116.503 ms 216.239.47.167 [AS15169]  119.378 ms 142.250.56.125 [AS15169]  116.592 ms
+19  * * *
+20  * * *
+21  * * *
+22  * * *
+23  * * *
+24  * * *
+25  * * *
+26  8.8.8.8 [AS15169]  117.005 ms * *
+root@lin-tst2:~/gitrepo/devops-netology#
 ```
 
 
 6.  
-Создаём рэйд зеркало:  
 ```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb1 /dev/sdc1
-mdadm: Note: this array has metadata at the start and
-    may not be suitable as a boot device.  If you plan to
-    store '/boot' on this device please ensure that
-    your boot-loader understands md/v1.x metadata, or use
-    --metadata=0.90
-mdadm: size set to 2094080K
-Continue creating array? yes
-mdadm: Defaulting to version 1.2 metadata
-mdadm: array /dev/md0 started.
-root@vagrant:/home/vagrant#
+                                                                                      My traceroute  [v0.94]
+lin-tst2 (10.74.9.29) -> 8.8.8.8                                                                                                                                               2021-11-17T08:58:02+0900
+Keys:  Help   Display mode   Restart statistics   Order of fields   quit
+                                                                                                                                                               Packets               Pings
+ Host                                                                                                                                                        Loss%   Snt   Last   Avg  Best  Wrst StDev
+ 1. AS???    10.74.9.254                                                                                                                                      0.0%    51    0.5   1.4   0.3  47.2   6.6
+ 2. AS48058  91.207.82.1                                                                                                                                      0.0%    51    0.9   0.8   0.6   1.3   0.1
+ 3. AS39811  85.140.127.5                                                                                                                                     0.0%    51   29.0   6.7   2.0  55.2  11.3
+ 4. AS39811  85.140.127.161                                                                                                                                   0.0%    51    2.1   2.2   2.0   2.7   0.1
+ 5. AS8359   212.188.22.198                                                                                                                                   0.0%    51    2.2   3.1   1.8  30.4   4.1
+ 6. AS8359   212.188.2.105                                                                                                                                    0.0%    51  104.2 102.5 101.9 105.2   0.7
+ 7. AS8359   212.188.55.161                                                                                                                                   0.0%    51   12.8  13.2  12.5  28.7   2.3
+ 8. AS8359   212.188.1.201                                                                                                                                    0.0%    51   35.6  31.5  31.0  35.6   0.7
+ 9. AS8359   212.188.55.113                                                                                                                                   0.0%    51   95.8  95.9  95.3  97.3   0.5
+10. AS8359   212.188.42.177                                                                                                                                   0.0%    51   47.2  47.1  46.7  47.4   0.1
+11. AS8359   212.188.42.149                                                                                                                                   0.0%    51   68.3  67.9  67.6  68.5   0.2
+12. AS8359   212.188.29.85                                                                                                                                    0.0%    51   84.0  83.8  83.4  84.5   0.2
+13. AS8359   195.34.50.161                                                                                                                                    0.0%    51   96.0  95.8  95.4  96.3   0.2
+14. AS8359   212.188.29.82                                                                                                                                    0.0%    51   95.7  95.6  95.2  96.4   0.2
+15. AS15169  108.170.250.34                                                                                                                                   0.0%    51   93.3  93.5  93.2  96.0   0.4
+16. AS15169  172.253.66.116                                                                                                                                   0.0%    51  118.9 119.4 118.6 124.5   1.1
+17. AS15169  172.253.66.108                                                                                                                                   0.0%    51  120.7 120.2 117.2 156.6   7.0
+18. AS15169  72.14.235.193                                                                                                                                    0.0%    51  120.3 119.8 118.4 150.3   4.5
+19. (waiting for reply)
+20. (waiting for reply)
+21. (waiting for reply)
+22. (waiting for reply)
+23. (waiting for reply)
+24. (waiting for reply)
+25. (waiting for reply)
+26. (waiting for reply)
+27. (waiting for reply)
+28. AS15169  8.8.8.8                                                                                                                                         38.0%    50  117.7 117.7 117.5 117.9   0.1
+
 ```
+наибольшая задержка от 172.253.66.108  
 
 
 7.  
-Создаём страйп:  
 ```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# mdadm --create --verbose /dev/md1 --level=0 --raid-devices=2 /dev/sdb2 /dev/sdc2
-mdadm: chunk size defaults to 512K
-mdadm: Defaulting to version 1.2 metadata
-mdadm: array /dev/md1 started.
-root@vagrant:/home/vagrant#
+root@lin-tst2:~/gitrepo/devops-netology# dig +trace dns.google ns
+
+; <<>> DiG 9.16.15-Debian <<>> +trace dns.google ns
+;; global options: +cmd
+.                       107579  IN      NS      j.root-servers.net.
+.                       107579  IN      NS      k.root-servers.net.
+.                       107579  IN      NS      l.root-servers.net.
+.                       107579  IN      NS      h.root-servers.net.
+.                       107579  IN      NS      f.root-servers.net.
+.                       107579  IN      NS      e.root-servers.net.
+.                       107579  IN      NS      m.root-servers.net.
+.                       107579  IN      NS      i.root-servers.net.
+.                       107579  IN      NS      g.root-servers.net.
+.                       107579  IN      NS      c.root-servers.net.
+.                       107579  IN      NS      b.root-servers.net.
+.                       107579  IN      NS      d.root-servers.net.
+.                       107579  IN      NS      a.root-servers.net.
+;; Received 824 bytes from 10.74.9.140#53(10.74.9.140) in 0 ms
+
+google.                 172800  IN      NS      ns-tld1.charlestonroadregistry.com.
+google.                 172800  IN      NS      ns-tld2.charlestonroadregistry.com.
+google.                 172800  IN      NS      ns-tld3.charlestonroadregistry.com.
+google.                 172800  IN      NS      ns-tld4.charlestonroadregistry.com.
+google.                 172800  IN      NS      ns-tld5.charlestonroadregistry.com.
+google.                 86400   IN      DS      6125 8 2 80F8B78D23107153578BAD3800E9543500474E5C30C29698B40A3DB2 3ED9DA9F
+google.                 86400   IN      RRSIG   DS 8 1 86400 20211129170000 20211116160000 14748 . L9Zyh/iUxwO9RNXO1zSEiPhfZVqqdagSNfGPnSkhFk/Bk63v0YCOmiRh n01o6TwGZ94u+j7KxYq4a/e+J0gy+QgN9oGvUhXm+MvqFmOVJcG/Vv91 6W1OB8MtnlB5bLop3zWPyuUTRCajQfN3NzIPOzssMn/vsBUBL5YrDSL0 Brn0ec5WONNXbLDp8viTf5fUlu5epRVDKM9wjDz9oek85ACecikvFp0s OYYV7P/g4JgY6Tp1yCFGpR38V4ZC4XS7W6HYCszDR6s+2WJpaLfMWtpk UF8pX2js+HtxKUSQ/hi4oXtKRiD/CeZO5trpFOvlmr6bT04SwdlhbAD3 EiQN3A==
+;; Received 730 bytes from 192.5.5.241#53(f.root-servers.net) in 104 ms
+
+dns.google.             10800   IN      NS      ns4.zdns.google.
+dns.google.             10800   IN      NS      ns1.zdns.google.
+dns.google.             10800   IN      NS      ns3.zdns.google.
+dns.google.             10800   IN      NS      ns2.zdns.google.
+dns.google.             3600    IN      DS      56044 8 2 1B0A7E90AA6B1AC65AA5B573EFC44ABF6CB2559444251B997103D2E4 0C351B08
+dns.google.             3600    IN      RRSIG   DS 8 2 3600 20211206042303 20211114042303 8830 google. GeLPRK+MKGF7VVXfaJcTebk1xAMKbAbbJny2ZmgmYX0EXp0TeuADlR/B YbzzGI1aAUwrCiofdvh2nA2NUTKKanGCjWrs7yMdJpHfDnjy2Qg3C+kP lRUPq0/DrDNHsantE6HX9YS5ESi/uKAJZkJmq+h4pmrLmM7jzJ6okTyL ZbY=
+;; Received 506 bytes from 216.239.38.105#53(ns-tld4.charlestonroadregistry.com) in 124 ms
+
+dns.google.             86400   IN      NS      ns1.zdns.google.
+dns.google.             86400   IN      NS      ns2.zdns.google.
+dns.google.             86400   IN      NS      ns4.zdns.google.
+dns.google.             86400   IN      NS      ns3.zdns.google.
+dns.google.             86400   IN      RRSIG   NS 8 2 86400 20211216161145 20211116161145 1773 dns.google. DmWYia6rp1dMI2/G+EQNvTJZoltbjaXXLi22Tmn4PWWefFU7RoOjIFfg Jcg+v9rfimDbg2n+qIpWBqbqc0tWNpcNqm8+A0+j9ow+kykTnJW683lC BOE+8e2pqA+D6nDf3UuDKBwtDbknOjGd1MHvMsjl/cnnEPiX/qQ6LQxd 7Zw=
+;; Received 286 bytes from 216.239.32.114#53(ns1.zdns.google) in 148 ms
+
+root@lin-tst2:~/gitrepo/devops-netology#
 ```
 
+DNS сервера для dns.google:  
+```
+ns1.zdns.google.
+ns2.zdns.google.
+ns4.zdns.google.
+ns3.zdns.google.
+```
+
+A записи:  
+```
+dns.google.             900     IN      A       8.8.8.8
+dns.google.             900     IN      A       8.8.4.4
+```
+
+Поиск A записи:  
+```
+root@lin-tst2:~/gitrepo/devops-netology# dig @ns1.zdns.google. dns.google a
+
+; <<>> DiG 9.16.15-Debian <<>> @ns1.zdns.google. dns.google a
+; (2 servers found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 932
+;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 512
+;; QUESTION SECTION:
+;dns.google.                    IN      A
+
+;; ANSWER SECTION:
+dns.google.             900     IN      A       8.8.8.8
+dns.google.             900     IN      A       8.8.4.4
+
+;; Query time: 148 msec
+;; SERVER: 216.239.32.114#53(216.239.32.114)
+;; WHEN: Wed Nov 17 09:03:03 +09 2021
+;; MSG SIZE  rcvd: 71
+
+root@lin-tst2:~/gitrepo/devops-netology#
+```
 
 8.  
-Создаём физич тома для LVM:  
+PTR записи:  
 ```
-root@vagrant:/home/vagrant# pvcreate /dev/md0
-  Physical volume "/dev/md0" successfully created.
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# pvcreate /dev/md1
-  Physical volume "/dev/md1" successfully created.
-root@vagrant:/home/vagrant#
+8.8.8.8.in-addr.arpa.   86399   IN      PTR     dns.google.
+4.4.8.8.in-addr.arpa.   86399   IN      PTR     dns.google.
 ```
+Доменное имя привязано: dns.google.  
 
-
-9.  
-Создаём LVM группу:  
 ```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# vgcreate lvmgrp1 /dev/md0 /dev/md1
-  Volume group "lvmgrp1" successfully created
-root@vagrant:/home/vagrant# 
-```
+root@lin-tst2:~/gitrepo/devops-netology# dig -x 8.8.8.8
 
+; <<>> DiG 9.16.15-Debian <<>> -x 8.8.8.8
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 56156
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
 
-10.  
-Создаём LV на RAID0:  
-```
-root@vagrant:/home/vagrant# lvcreate -L100M lvmgrp1 /dev/md1
-  Logical volume "lvol0" created.
-root@vagrant:/home/vagrant#
-```
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4000
+;; QUESTION SECTION:
+;8.8.8.8.in-addr.arpa.          IN      PTR
 
+;; ANSWER SECTION:
+8.8.8.8.in-addr.arpa.   86399   IN      PTR     dns.google.
 
-11.  
-Создаём файловую систему на LV:  
-```
-root@vagrant:/home/vagrant# mkfs.ext4 /dev/lvmgrp1/lvol0
-mke2fs 1.45.5 (07-Jan-2020)
-Creating filesystem with 25600 4k blocks and 25600 inodes
+;; Query time: 724 msec
+;; SERVER: 10.74.9.140#53(10.74.9.140)
+;; WHEN: Wed Nov 17 09:05:05 +09 2021
+;; MSG SIZE  rcvd: 73
 
-Allocating group tables: done
-Writing inode tables: done
-Creating journal (1024 blocks): done
-Writing superblocks and filesystem accounting information: done
+root@lin-tst2:~/gitrepo/devops-netology#
+root@lin-tst2:~/gitrepo/devops-netology#
+root@lin-tst2:~/gitrepo/devops-netology# dig -x 8.8.4.4
 
-root@vagrant:/home/vagrant#
-```
+; <<>> DiG 9.16.15-Debian <<>> -x 8.8.4.4
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 62845
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
 
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4000
+;; QUESTION SECTION:
+;4.4.8.8.in-addr.arpa.          IN      PTR
 
-12.  
-Монтируем:  
-```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# mkdir /tmp/new
-root@vagrant:/home/vagrant# mount /dev/lvmgrp1/lvol0 /tmp/new
-root@vagrant:/home/vagrant#
-```
+;; ANSWER SECTION:
+4.4.8.8.in-addr.arpa.   86399   IN      PTR     dns.google.
 
+;; Query time: 376 msec
+;; SERVER: 10.74.9.140#53(10.74.9.140)
+;; WHEN: Wed Nov 17 09:05:13 +09 2021
+;; MSG SIZE  rcvd: 73
 
-13.  
-Размещаем файл:  
-```
-root@vagrant:/home/vagrant# wget https://mirror.yandex.ru/ubuntu/ls-lR.gz -O /tmp/new/test.gz
---2021-10-29 04:52:14--  https://mirror.yandex.ru/ubuntu/ls-lR.gz
-Resolving mirror.yandex.ru (mirror.yandex.ru)... 213.180.204.183, 2a02:6b8::183
-Connecting to mirror.yandex.ru (mirror.yandex.ru)|213.180.204.183|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 22126613 (21M) [application/octet-stream]
-Saving to: ‘/tmp/new/test.gz’
-
-/tmp/new/test.gz                                                100%[====================================================================================================================================================>]  21.10M  4.70MB/s    in 8.2s
-
-2021-10-29 04:52:23 (2.58 MB/s) - ‘/tmp/new/test.gz’ saved [22126613/22126613]
-
-root@vagrant:/home/vagrant#
-```
-
-
-14.  
-Вывод lsblk:  
-```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# lsblk
-NAME                 MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT
-sda                    8:0    0   64G  0 disk
-├─sda1                 8:1    0  512M  0 part  /boot/efi
-├─sda2                 8:2    0    1K  0 part
-└─sda5                 8:5    0 63.5G  0 part
-  ├─vgvagrant-root   253:0    0 62.6G  0 lvm   /
-  └─vgvagrant-swap_1 253:1    0  980M  0 lvm   [SWAP]
-sdb                    8:16   0  2.5G  0 disk
-├─sdb1                 8:17   0    2G  0 part
-│ └─md0                9:0    0    2G  0 raid1
-└─sdb2                 8:18   0  511M  0 part
-  └─md1                9:1    0 1018M  0 raid0
-    └─lvmgrp1-lvol0  253:2    0  100M  0 lvm   /tmp/new
-sdc                    8:32   0  2.5G  0 disk
-├─sdc1                 8:33   0    2G  0 part
-│ └─md0                9:0    0    2G  0 raid1
-└─sdc2                 8:34   0  511M  0 part
-  └─md1                9:1    0 1018M  0 raid0
-    └─lvmgrp1-lvol0  253:2    0  100M  0 lvm   /tmp/new
-root@vagrant:/home/vagrant#
-```
-
-
-15.  
-Тестируем целостность:  
-```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# gzip -t /tmp/new/test.gz
-root@vagrant:/home/vagrant# echo $?
-0
-root@vagrant:/home/vagrant#
-```
-
-
-16.  
-Перемещаем:  
-```
-root@vagrant:/home/vagrant# pvmove /dev/md1 /dev/md0
-  /dev/md1: Moved: 8.00%
-  /dev/md1: Moved: 100.00%
-root@vagrant:/home/vagrant#
-```
-
-
-17.  
-Делаем сбой одного из дисков  врейде:  
-```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# mdadm --fail /dev/md0 /dev/sdb1
-mdadm: set /dev/sdb1 faulty in /dev/md0
-root@vagrant:/home/vagrant#
-```
-
-
-18.  
-Наблюдаем в выводе dmesg:  
-```
-[ 2639.768098] md/raid1:md0: Disk failure on sdb1, disabling device.
-               md/raid1:md0: Operation continuing on 1 devices.
-```
-
-
-19.  
-Проверяем уелостность:  
-```
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# gzip -t /tmp/new/test.gz
-root@vagrant:/home/vagrant# echo $?
-0
-root@vagrant:/home/vagrant#
-```
-
-
-20.  
-Уничтожаем чего вагрант насоздавал:
-```
-d:\vm\vagrant>vagrant halt
-==> default: Attempting graceful shutdown of VM...
-
-d:\vm\vagrant>
-```
-```
-d:\vm\vagrant>vagrant destroy
-    default: Are you sure you want to destroy the 'default' VM? [y/N] y
-==> default: Destroying VM and associated drives...
-
-d:\vm\vagrant>
+root@lin-tst2:~/gitrepo/devops-netology#
 ```
