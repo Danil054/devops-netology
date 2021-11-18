@@ -37,6 +37,23 @@ interface GigabitEthernet0/6
  switchport mode trunk
 ```
 
+p.s.  
+```
+Есть пакет vlan для linux, настраивать сами vlan интерфейсы лучше в конфигах для настройки интерфейсов (можно через vconfig, но тогда не сохранится после перезагрузки).
+Подгрузить модуль ядра (он вроде и автоматом подгружается): 8021q
+Например для debian, что бы добавить 26й VLAN в конфиг для интерфейсов прописать:
+iface eth0.26 inet static
+  address 192.168.26.1
+  netmask 255.255.255.0
+
+или
+
+iface vlan26 inet static
+  vlan-raw-device eth0
+  address 192.168.26.1
+  netmask 255.255.255.0
+```
+
 
 4.  
 Агрегацию портов в Linux можно сделать через модуль bonding, либо через systemd-networkd.  
