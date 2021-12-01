@@ -1,343 +1,299 @@
 1.  
-```
-User Access Verification
-
-Username: rviews
-route-views>
-route-views>show ip route 91.207.82.13/32
-                                      ^
-% Invalid input detected at '^' marker.
-
-route-views>show ip route 91.207.82.13
-Routing entry for 91.207.82.0/23
-  Known via "bgp 6447", distance 20, metric 0
-  Tag 2497, type external
-  Last update from 202.232.0.2 1w6d ago
-  Routing Descriptor Blocks:
-  * 202.232.0.2, from 202.232.0.2, 1w6d ago
-      Route metric is 0, traffic share count is 1
-      AS Hops 4
-      Route tag 2497
-      MPLS label: none
-route-views>
-route-views>show bgp 91.207.82.0/23
-BGP routing table entry for 91.207.82.0/23, version 1325118447
-Paths: (24 available, best #12, table default)
-  Not advertised to any peer
-  Refresh Epoch 3
-  3303 12389 41789 48058
-    217.192.89.50 from 217.192.89.50 (138.187.128.158)
-      Origin IGP, localpref 100, valid, external
-      Community: 3303:1004 3303:1006 3303:1030 3303:3056
-      path 7FE1107D91B8 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  3267 20485 41789 41789 48058
-    194.85.40.15 from 194.85.40.15 (185.141.126.1)
-      Origin IGP, metric 0, localpref 100, valid, external
-      path 7FE18E06B8E8 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  57866 3356 12389 41789 48058
-    37.139.139.17 from 37.139.139.17 (37.139.139.17)
-      Origin IGP, metric 0, localpref 100, valid, external
-      Community: 3356:2 3356:22 3356:100 3356:123 3356:501 3356:903 3356:2065
-      path 7FE0221C4940 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  7018 3356 12389 41789 48058
-    12.0.1.63 from 12.0.1.63 (12.0.1.63)
-      Origin IGP, localpref 100, valid, external
-      Community: 7018:5000 7018:37232
-      path 7FE04E801CC8 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  3333 8359 39811 48058
-    193.0.0.56 from 193.0.0.56 (193.0.0.56)
-      Origin IGP, localpref 100, valid, external
-      Community: 8359:5500 8359:55728
-      path 7FE0DC547828 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  49788 12552 8359 39811 48058
-    91.218.184.60 from 91.218.184.60 (91.218.184.60)
-      Origin IGP, localpref 100, valid, external
-      Community: 12552:12000 12552:12100 12552:12101 12552:22000
-      Extended Community: 0x43:100:1
-      path 7FE12B7EE820 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  20912 3257 12389 12389 12389 12389 41789 48058
-    212.66.96.126 from 212.66.96.126 (212.66.96.126)
-      Origin IGP, localpref 100, valid, external
-      Community: 3257:4000 3257:8794 3257:50001 3257:50110 3257:54900 3257:54901 20912:65004
-      path 7FE101972430 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  8283 8359 39811 48058
-    94.142.247.3 from 94.142.247.3 (94.142.247.3)
-      Origin IGP, metric 0, localpref 100, valid, external
-      Community: 8283:1 8283:101 8359:5500 8359:55728
-      unknown transitive attribute: flag 0xE0 type 0x20 length 0x18
-        value 0000 205B 0000 0000 0000 0001 0000 205B
-              0000 0005 0000 0001
-      path 7FE08B3F1940 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  3356 12389 41789 48058
-    4.68.4.46 from 4.68.4.46 (4.69.184.201)
-      Origin IGP, metric 0, localpref 100, valid, external
-      Community: 3356:2 3356:22 3356:100 3356:123 3356:501 3356:903 3356:2065
-      path 7FE03256FE40 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  852 3491 12389 41789 48058
-    154.11.12.212 from 154.11.12.212 (96.1.209.43)
-      Origin IGP, metric 0, localpref 100, valid, external
-      path 7FE17A0DCFE8 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  1221 4637 12389 41789 48058
-    203.62.252.83 from 203.62.252.83 (203.62.252.83)
-      Origin IGP, localpref 100, valid, external
-      path 7FE0C57D6F88 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  2497 12389 41789 48058
-    202.232.0.2 from 202.232.0.2 (58.138.96.254)
-      Origin IGP, localpref 100, valid, external, best
-      path 7FE1098E9F80 RPKI State not found
-      rx pathid: 0, tx pathid: 0x0
-  Refresh Epoch 1
-  20130 6939 8359 39811 48058
-    140.192.8.16 from 140.192.8.16 (140.192.8.16)
-      Origin IGP, localpref 100, valid, external
-      path 7FE0E86C3430 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  701 1273 12389 41789 48058
-    137.39.3.55 from 137.39.3.55 (137.39.3.55)
-      Origin IGP, localpref 100, valid, external
-      path 7FE03FDD28F8 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  3257 12389 12389 12389 12389 41789 48058
-    89.149.178.10 from 89.149.178.10 (213.200.83.26)
-      Origin IGP, metric 10, localpref 100, valid, external
-      Community: 3257:4000 3257:8794 3257:50001 3257:50110 3257:54900 3257:54901
-      path 7FE120BCA908 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  3549 3356 12389 41789 48058
-    208.51.134.254 from 208.51.134.254 (67.16.168.191)
-      Origin IGP, metric 0, localpref 100, valid, external
-      Community: 3356:2 3356:22 3356:100 3356:123 3356:501 3356:903 3356:2065 3549:2581 3549:30840
-      path 7FE13B8F3470 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  53767 174 20485 41789 41789 48058
-    162.251.163.2 from 162.251.163.2 (162.251.162.3)
-      Origin IGP, localpref 100, valid, external
-      Community: 174:21101 174:22014 53767:5000
-      path 7FE0E902D360 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  101 3491 12389 41789 48058
-    209.124.176.223 from 209.124.176.223 (209.124.176.223)
-      Origin IGP, localpref 100, valid, external
-      Community: 101:20300 101:22100 3491:400 3491:415 3491:9001 3491:9080 3491:9081 3491:9087 3491:62210 3491:62220
-      path 7FE0352BFAD0 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  7660 4635 8359 39811 48058
-    203.181.248.168 from 203.181.248.168 (203.181.248.168)
-      Origin IGP, localpref 100, valid, external
-      Community: 0:4635 0:9002 0:12389 0:13335 0:16625 0:18403 0:20485 0:20940 0:31133 0:32934 4635:4635 4635:65022 7660:6 7660:9003 8359:5500 8359:55728
-      path 7FE00645A390 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  3561 3910 3356 12389 41789 48058
-    206.24.210.80 from 206.24.210.80 (206.24.210.80)
-      Origin IGP, localpref 100, valid, external
-      path 7FE0A215E488 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  4901 6079 8359 39811 48058
-    162.250.137.254 from 162.250.137.254 (162.250.137.254)
-      Origin IGP, localpref 100, valid, external
-      Community: 65000:10100 65000:10300 65000:10400
-      path 7FE0529DBC68 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  1351 8359 39811 48058
-    132.198.255.253 from 132.198.255.253 (132.198.255.253)
-      Origin IGP, localpref 100, valid, external
-      path 7FE111113AC8 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  6939 8359 39811 48058
-    64.71.137.241 from 64.71.137.241 (216.218.252.164)
-      Origin IGP, localpref 100, valid, external
-      path 7FE12F2CEDC0 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-  Refresh Epoch 1
-  19214 174 20485 41789 41789 48058
-    208.74.64.40 from 208.74.64.40 (208.74.64.40)
-      Origin IGP, localpref 100, valid, external
-      Community: 174:21101 174:22014
-      path 7FE0C4DD4780 RPKI State not found
-      rx pathid: 0, tx pathid: 0
-route-views>
-```
+Плагин поставил, зарегистрировался, создал пару записей:  
+(https://github.com/Danil054/devops-netology/blob/main/pics/bitwarden1.png)  
 
 2.  
-
-В конфигурацию интерфейсов ```/etc/network/interfaces ```  добавили блок описывающий dummy0 интерфейс:  
-```
-root@lin-tst2:~# cat /etc/network/interfaces
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-
-source /etc/network/interfaces.d/*
-
-# The loopback network interface
-auto lo
-auto ens192
-iface lo inet loopback
-
-# The primary network interface
-allow-hotplug ens192
-iface ens192 inet static
-        address 10.74.9.29/24
-        gateway 10.74.9.254
-        # dns-* options are implemented by the resolvconf package, if installed
-        dns-nameservers 10.74.9.140 10.74.9.141
-        dns-search drsk.ru
-
-auto dummy0
-iface dummy0 inet static
-    address 192.168.16.1/32
-    pre-up ip link add dummy0 type dummy
-    post-down ip link del dummy0
-root@lin-tst2:~#
-```
-
-Проверил подгружен ли модуль:  
-```
-root@lin-tst2:~# lsmod | grep dummy
-dummy                  16384  0
-```
-
-Перезапустил "сеть":  
-```
-systemctl restart  networking
-```
-
-До перезапуска командой ```ip link set dummy0 up``` не давало подниять интерфейс:  
-```
-root@lin-tst2:~# ip link set dummy0 up
-Cannot find device "dummy0"
-root@lin-tst2:~#
-```
-
-После перезапуска "сети" интерфейс появился:  
-```
-root@lin-tst2:~# ip addr
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
-       valid_lft forever preferred_lft forever
-2: ens192: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-    link/ether 00:50:56:b1:ef:c6 brd ff:ff:ff:ff:ff:ff
-    altname enp11s0
-    inet 10.74.9.29/24 brd 10.74.9.255 scope global ens192
-       valid_lft forever preferred_lft forever
-    inet6 fe80::250:56ff:feb1:efc6/64 scope link
-       valid_lft forever preferred_lft forever
-3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
-    link/ether 02:42:10:6e:c3:06 brd ff:ff:ff:ff:ff:ff
-    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
-       valid_lft forever preferred_lft forever
-11: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/ether f6:26:39:39:e0:f9 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.16.1/32 brd 192.168.16.1 scope global dummy0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::f426:39ff:fe39:e0f9/64 scope link
-       valid_lft forever preferred_lft forever
-root@lin-tst2:~#
-```
-
-Статические маршруты добавляем командами:  
-```
-ip route add 192.168.100.0/24 via 10.74.9.200
-ip route add 192.168.110.0/24 via 10.74.9.200
-ip route add 192.168.120.0/24 via 10.74.9.200
-ip route add 192.168.130.0/24 via 10.74.9.100
-```
-
-Смотрим таблицу маршрутизации:  
-```
-root@lin-tst2:~# ip route list
-default via 10.74.9.254 dev ens192 onlink
-10.74.9.0/24 dev ens192 proto kernel scope link src 10.74.9.29
-172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
-192.168.100.0/24 via 10.74.9.200 dev ens192
-192.168.110.0/24 via 10.74.9.200 dev ens192
-192.168.120.0/24 via 10.74.9.200 dev ens192
-192.168.130.0/24 via 10.74.9.100 dev ens192
-root@lin-tst2:~#
-```
+На телефон установил authenticator, в профиле настроил двухфакторную аутентификацию и активировал в приложении по qr коду, теперь при входе запрос:  
+(https://github.com/Danil054/devops-netology/blob/main/pics/bitwarden2Fa.png)  
+В приложении на телефоне смотрим код, вводим его в браузере и заходим  
 
 3.  
-Смотрим открытые TCP порты и какие процессы их открыли:  
+Apache2 установлен:  
 ```
-root@lin-tst2:~# ss -l -n -t -p
-State                      Recv-Q                     Send-Q                                         Local Address:Port                                           Peer Address:Port                     Process
-LISTEN                     0                          511                                                  0.0.0.0:80                                                  0.0.0.0:*                         users:(("nginx",pid=559,fd=6),("nginx",pid=558,fd=6),("nginx",pid=557,fd=6),("nginx",pid=556,fd=6),("nginx",pid=555,fd=6))
-LISTEN                     0                          511                                                  0.0.0.0:81                                                  0.0.0.0:*                         users:(("nginx",pid=559,fd=8),("nginx",pid=558,fd=8),("nginx",pid=557,fd=8),("nginx",pid=556,fd=8),("nginx",pid=555,fd=8))
-LISTEN                     0                          511                                                  0.0.0.0:82                                                  0.0.0.0:*                         users:(("nginx",pid=559,fd=9),("nginx",pid=558,fd=9),("nginx",pid=557,fd=9),("nginx",pid=556,fd=9),("nginx",pid=555,fd=9))
-LISTEN                     0                          128                                                  0.0.0.0:22                                                  0.0.0.0:*                         users:(("sshd",pid=531,fd=3))
-LISTEN                     0                          511                                                     [::]:80                                                     [::]:*                         users:(("nginx",pid=559,fd=7),("nginx",pid=558,fd=7),("nginx",pid=557,fd=7),("nginx",pid=556,fd=7),("nginx",pid=555,fd=7))
-LISTEN                     0                          511                                                        *:83                                                        *:*                         users:(("apache2",pid=125662,fd=4),("apache2",pid=125661,fd=4),("apache2",pid=125660,fd=4),("apache2",pid=125658,fd=4),("apache2",pid=125657,fd=4),("apache2",pid=545,fd=4))
-LISTEN                     0                          128                                                     [::]:22                                                     [::]:*                         users:(("sshd",pid=531,fd=4))
-root@lin-tst2:~#
+root@lin-tst2:/etc/apache2# dpkg -l | grep apach
+ii  apache2                                2.4.51-1~deb11u1               amd64        Apache HTTP Server
+ii  apache2-bin                            2.4.51-1~deb11u1               amd64        Apache HTTP Server (modules and other binary files)
+ii  apache2-data                           2.4.51-1~deb11u1               all          Apache HTTP Server (common files)
+ii  apache2-utils                          2.4.51-1~deb11u1               amd64        Apache HTTP Server (utility programs for web servers)
+ii  libapache2-mod-php7.4                  7.4.25-1+deb11u1               amd64        server-side, HTML-embedded scripting language (Apache 2 module)
+root@lin-tst2:/etc/apache2#
 ```
-Видно, что порты 80-83 это для HTTP протокола используются nginx и apache2,  
-порт 22 - для ssh  
+подключаем модуль ssl и перезапускаем вебсервис:  
+```
+root@lin-tst2:/# a2enmod ssl
+Considering dependency setenvif for ssl:
+Module setenvif already enabled
+Considering dependency mime for ssl:
+Module mime already enabled
+Considering dependency socache_shmcb for ssl:
+Enabling module socache_shmcb.
+Enabling module ssl.
+See /usr/share/doc/apache2/README.Debian.gz on how to configure SSL and create self-signed certificates.
+To activate the new configuration, you need to run:
+  systemctl restart apache2
+root@lin-tst2:/#
+root@lin-tst2:/#   systemctl restart apache2
+root@lin-tst2:/#
+```
 
+Генерируем самоподписанный сертификат:  
+```
+root@lin-tst2:/#
+root@lin-tst2:/# openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+> -keyout /etc/ssl/private/apache-selfsigned.key \
+> -out /etc/ssl/certs/apache-selfsigned.crt \
+> -subj "/C=RU/ST=Moscow/L=Moscow/O=Company Name/OU=Org/CN=lin-tst2.drsk.ru"
+Generating a RSA private key
+.......................+++++
+..................+++++
+writing new private key to '/etc/ssl/private/apache-selfsigned.key'
+-----
+root@lin-tst2:/#
+```
+
+Создаём конфигурацию для веб сервера:  
+```
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru# cat /etc/apache2/sites-available/010-lin-tst2.drsk.ru.conf
+<VirtualHost *:443>
+   ServerName lin-tst2.drsk.ru
+   DocumentRoot /var/www/vhosts/lin-tst2.drsk.ru
+   SSLEngine on
+   SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+   SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+</VirtualHost>
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru#
+```
+
+"Активируем" конфигурацию:  
+```
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru#
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru# ln -s /etc/apache2/sites-available/010-lin-tst2.drsk.ru.conf /etc/apache2/sites-enabled/010-lin-tst2.drsk.ru.conf
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru#
+```
+
+Помещаем по пути DocumentRoot сайт:  
+```
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru#
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru# cat /var/www/vhosts/lin-tst2.drsk.ru/index.php
+<h1> Hello Netlogy</h1>
+```
+
+перечитываем апача:  
+```
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru#
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru# systemctl reload apache2
+root@lin-tst2:/var/www/vhosts/lin-tst2.drsk.ru#
+```
+
+Проверяем доступность сайта:  
+(https://github.com/Danil054/devops-netology/blob/main/pics/sslself.png)  
+Сайт открывается, но в браузере ругань на недоверие к сертификату, так как самоподписанный.  
 
 4.  
-Смотрим открытые UDP порты:  
+Склониоровали гит репозитарий:  
 ```
-root@lin-tst2:~# ss -n -l -u -p
-State                  Recv-Q                  Send-Q                                   Local Address:Port                                   Peer Address:Port                 Process
-root@lin-tst2:~#
+root@lin-tst2:~/gitrepo/testssl# git clone --depth 1 https://github.com/drwetter/testssl.sh.git
+Cloning into 'testssl.sh'...
+remote: Enumerating objects: 100, done.
+remote: Counting objects: 100% (100/100), done.
+remote: Compressing objects: 100% (93/93), done.
+remote: Total 100 (delta 14), reused 40 (delta 6), pack-reused 0
+Receiving objects: 100% (100/100), 8.60 MiB | 4.82 MiB/s, done.
+Resolving deltas: 100% (14/14), done.
+root@lin-tst2:~/gitrepo/testssl#
 ```
-у меня ( на debian) ничего не открыто.  
-Но если взять, например ubuntu в vagrant, то можно видеть:  
-```
-root@vagrant:/home/vagrant# ss -n -u -l -p
-State                   Recv-Q                  Send-Q                                    Local Address:Port                                   Peer Address:Port                  Process
-UNCONN                  0                       0                                         127.0.0.53%lo:53                                          0.0.0.0:*                      users:(("systemd-resolve",pid=562,fd=12))
-UNCONN                  0                       0                                        10.0.2.15%eth0:68                                          0.0.0.0:*                      users:(("systemd-network",pid=404,fd=15))
-UNCONN                  0                       0                                               0.0.0.0:111                                         0.0.0.0:*                      users:(("rpcbind",pid=560,fd=5),("systemd",pid=1,fd=36))
-UNCONN                  0                       0                                                  [::]:111                                            [::]:*                      users:(("rpcbind",pid=560,fd=7),("systemd",pid=1,fd=38))
-root@vagrant:/home/vagrant#
-```
-53 - резолв DNS (использует systemd-resolve)  
-68 - для DHCP (использует systemd-network )  
-111 - для RPC  (использует rpcbind )  
 
+Запустили сканирование:  
+```
+root@lin-tst2:~/gitrepo/testssl/testssl.sh#
+root@lin-tst2:~/gitrepo/testssl/testssl.sh# ./testssl.sh -U --sneaky https://example.org
+
+###########################################################
+    testssl.sh       3.1dev from https://testssl.sh/dev/
+    (f6571c7 2021-11-30 11:19:44 -- )
+
+      This program is free software. Distribution and
+             modification under GPLv2 permitted.
+      USAGE w/o ANY WARRANTY. USE IT AT YOUR OWN RISK!
+
+       Please file bugs @ https://testssl.sh/bugs/
+
+###########################################################
+
+ Using "OpenSSL 1.0.2-chacha (1.0.2k-dev)" [~179 ciphers]
+ on lin-tst2:./bin/openssl.Linux.x86_64
+ (built: "Jan 18 17:12:17 2019", platform: "linux-x86_64")
+
+
+ Start 2021-12-01 13:40:27        -->> 93.184.216.34:443 (example.org) <<--
+
+ Further IP addresses:   2606:2800:220:1:248:1893:25c8:1946
+ rDNS (93.184.216.34):   --
+ Service detected:       HTTP
+
+
+ Testing vulnerabilities
+
+ Heartbleed (CVE-2014-0160)                not vulnerable (OK), no heartbeat extension
+ CCS (CVE-2014-0224)                       not vulnerable (OK)
+ Ticketbleed (CVE-2016-9244), experiment.  not vulnerable (OK)
+ ROBOT                                     not vulnerable (OK)
+ Secure Renegotiation (RFC 5746)           supported (OK)
+ Secure Client-Initiated Renegotiation     not vulnerable (OK)
+ CRIME, TLS (CVE-2012-4929)                not vulnerable (OK)
+ BREACH (CVE-2013-3587)                    potentially NOT ok, "gzip deflate" HTTP compression detected. - only supplied "/" tested
+                                           Can be ignored for static pages or if no secrets in the page
+ POODLE, SSL (CVE-2014-3566)               not vulnerable (OK)
+ TLS_FALLBACK_SCSV (RFC 7507)              Downgrade attack prevention supported (OK)
+ SWEET32 (CVE-2016-2183, CVE-2016-6329)    not vulnerable (OK)
+ FREAK (CVE-2015-0204)                     not vulnerable (OK)
+ DROWN (CVE-2016-0800, CVE-2016-0703)      not vulnerable on this host and port (OK)
+                                           make sure you don't use this certificate elsewhere with SSLv2 enabled services
+                                           https://censys.io/ipv4?q=200DCAFA767C8450ECE644879C062A0CDF52240FE05BB7EB284611C3AEF3EC2E could help you to find out
+ LOGJAM (CVE-2015-4000), experimental      not vulnerable (OK): no DH EXPORT ciphers, no common prime detected
+ BEAST (CVE-2011-3389)                     TLS1: ECDHE-RSA-AES128-SHA ECDHE-RSA-AES256-SHA DHE-RSA-AES128-SHA DHE-RSA-AES256-SHA DHE-RSA-CAMELLIA256-SHA DHE-RSA-CAMELLIA128-SHA AES256-SHA
+                                                 CAMELLIA256-SHA AES128-SHA CAMELLIA128-SHA DHE-RSA-SEED-SHA SEED-SHA
+                                           VULNERABLE -- but also supports higher protocols  TLSv1.1 TLSv1.2 (likely mitigated)
+ LUCKY13 (CVE-2013-0169), experimental     potentially VULNERABLE, uses cipher block chaining (CBC) ciphers with TLS. Check patches
+ Winshock (CVE-2014-6321), experimental    not vulnerable (OK)
+ RC4 (CVE-2013-2566, CVE-2015-2808)        no RC4 ciphers detected (OK)
+
+
+ Done 2021-12-01 13:42:18 [ 115s] -->> 93.184.216.34:443 (example.org) <<--
+
+
+root@lin-tst2:~/gitrepo/testssl/testssl.sh#
+```
 
 5.  
-Пример схемы сети (вымышленный):  
-(https://github.com/Danil054/devops-netology/blob/main/pics/net1.png)
+SSH сервер установлен:  
+```
+vagrant@vagrant:~$
+vagrant@vagrant:~$ dpkg -l | grep openssh
+ii  openssh-client                       1:8.2p1-4ubuntu0.2                amd64        secure shell (SSH) client, for secure access to remote machines
+ii  openssh-server                       1:8.2p1-4ubuntu0.2                amd64        secure shell (SSH) server, for secure access from remote machines
+ii  openssh-sftp-server                  1:8.2p1-4ubuntu0.2                amd64        secure shell (SSH) sftp server module, for SFTP access from remote machines
+vagrant@vagrant:~$
+```
 
+Генерируем ключи:  
+```
+vagrant@vagrant:~$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/vagrant/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/vagrant/.ssh/id_rsa
+Your public key has been saved in /home/vagrant/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:iztWHBXrmEoeknRmWxAInGVWV8mz5oBLGn9z1T+EgM0 vagrant@vagrant
+The key's randomart image is:
++---[RSA 3072]----+
+| ..++o+..o*o     |
+|  oo.  o .=E     |
+|    . +....o...  |
+|   ..=ooo+o .... |
+|    o=+oS=..  .. |
+|    .+o+=.o    ..|
+|      +o.o      .|
+|      o.         |
+|     ...         |
++----[SHA256]-----+
+vagrant@vagrant:~$
+```
 
+Копируем публичный ключ на другой сервер, к которому хотим подключаться по ssh:  
+```
+vagrant@vagrant:~$
+vagrant@vagrant:~$ ssh-copy-id root@10.74.9.29
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/vagrant/.ssh/id_rsa.pub"
+The authenticity of host '10.74.9.29 (10.74.9.29)' can't be established.
+ECDSA key fingerprint is SHA256:60dSjs9xJ+MITzSsQD/cS9faAOpZSjiZd7xVmS+vCE8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+root@10.74.9.29's password:
 
+Number of key(s) added: 1
 
+Now try logging into the machine, with:   "ssh 'root@10.74.9.29'"
+and check to make sure that only the key(s) you wanted were added.
+
+vagrant@vagrant:~$
+```
+
+Проверяем подключение по ключу:  
+```
+vagrant@vagrant:~$
+vagrant@vagrant:~$ ssh 'root@10.74.9.29'
+Linux lin-tst2 5.10.0-9-amd64 #1 SMP Debian 5.10.70-1 (2021-09-30) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Thu Nov 25 10:31:50 2021 from 172.20.5.4
+root@lin-tst2:~#
+root@lin-tst2:~#
+```
+попали на сервер под root-ом  
+
+6.  
+Переименовываем файл закрытого ключа:  
+```
+vagrant@vagrant:~/.ssh$
+vagrant@vagrant:~/.ssh$ mv id_rsa for-lin-tst2.key
+vagrant@vagrant:~/.ssh$
+```
+
+Создаём конфиг для клиента:  
+```
+vagrant@vagrant:~/.ssh$ cat config
+Host lin-tst2
+  HostName lin-tst2.drsk.ru
+  IdentityFile ~/.ssh/for-lin-tst2.key
+  User root
+  Port 22
+vagrant@vagrant:~/.ssh$
+```
+
+Проверяем подключение по имени хоста:  
+```
+vagrant@vagrant:~/.ssh$
+vagrant@vagrant:~/.ssh$ ssh lin-tst2
+The authenticity of host 'lin-tst2.drsk.ru (10.74.9.29)' can't be established.
+ECDSA key fingerprint is SHA256:60dSjs9xJ+MITzSsQD/cS9faAOpZSjiZd7xVmS+vCE8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'lin-tst2.drsk.ru' (ECDSA) to the list of known hosts.
+Linux lin-tst2 5.10.0-9-amd64 #1 SMP Debian 5.10.70-1 (2021-09-30) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Wed Dec  1 14:00:28 2021 from 172.20.5.4
+root@lin-tst2:~#
+```
+Подключились рутом у серверу.  
+
+7.  
+Запускаем дамп:  
+```
+root@lin-tst2:~#
+root@lin-tst2:~# tcpdump -c 100 -w dump.pcap
+tcpdump: listening on ens192, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+
+100 packets captured
+108 packets received by filter
+0 packets dropped by kernel
+root@lin-tst2:~#
+```
+Копируем dump.pcap на компьютер с установленным wireshark и открываем файл, видим в основном ssh трафик:  
+(https://github.com/Danil054/devops-netology/blob/main/pics/dump.png)  
 
 
 
