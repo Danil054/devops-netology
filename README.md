@@ -278,7 +278,7 @@ permitted by applicable law.
 Last login: Wed Dec  1 14:00:28 2021 from 172.20.5.4
 root@lin-tst2:~#
 ```
-Подключились рутом у серверу.  
+Подключились рутом к серверу.  
 
 7.  
 Запускаем дамп:  
