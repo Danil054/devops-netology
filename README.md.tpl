@@ -19,9 +19,9 @@ c = a + b
 ### Вопросы:
 | Вопрос  | Ответ |
 | ------------- | ------------- |
-| Какое значение будет присвоено переменной `c`?  | выходит ошибка: TypeError: unsupported operand type(s) for +: 'int' and 'str'  |
-| Как получить для переменной `c` значение 12?  | привести переменную a к str ( c = str(a) + b )   |
-| Как получить для переменной `c` значение 3?  | привести переменную b к int ( c = a + int(b) )  |
+| Какое значение будет присвоено переменной `c`?  | ???  |
+| Как получить для переменной `c` значение 12?  | ???  |
+| Как получить для переменной `c` значение 3?  | ???  |
 
 ## Обязательная задача 2
 Мы устроились на работу в компанию, где раньше уже был DevOps Engineer. Он написал скрипт, позволяющий узнать, какие файлы модифицированы в репозитории, относительно локальных изменений. Этим скриптом недовольно начальство, потому что в его выводе есть не все изменённые файлы, а также непонятен полный путь к директории, где они находятся. Как можно доработать скрипт ниже, чтобы он исполнял требования вашего руководителя?
@@ -43,24 +43,12 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-#!/usr/bin/env python3
-
-import os
-
-bash_command = ["cd ~/netology/sysadm-homeworks", "pwd", "git status"]
-result_os = os.popen(' && '.join(bash_command)).read()
-file_dir = result_os.split('\n')[0]
-for result in result_os.split('\n'):
-    if result.find('modified') != -1:
-        prepare_result = result.replace('\tmodified:   ', '')
-        print(f"{file_dir}/{prepare_result}")
-
+???
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-/root/netology/sysadm-homeworks/2.tst
-/root/netology/sysadm-homeworks/3.tst
+???
 ```
 
 ## Обязательная задача 3
@@ -68,36 +56,12 @@ for result in result_os.split('\n'):
 
 ### Ваш скрипт:
 ```python
-#!/usr/bin/env python3
-
-import os
-import sys
-
-file_dir = sys.argv[1]
-git_dir = ".git"
-list_dir = os.listdir(file_dir)
-
-if git_dir not in list_dir:
-    print("Is it not git directory")
-    sys.exit()
-
-cmd_1 = "cd " + file_dir
-bash_command = [cmd_1, "git status"]
-result_os = os.popen(' && '.join(bash_command)).read()
-for result in result_os.split('\n'):
-    if result.find('modified') != -1:
-        prepare_result = result.replace('\tmodified:   ', '')
-        print(f"{file_dir}/{prepare_result}")
-
-
+???
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-root@vagrant:~/gitrepo/devops-netology/pytest# ./3.py  /root/netology/sysadm-homeworks/
-/root/netology/sysadm-homeworks//2.tst
-/root/netology/sysadm-homeworks//3.tst
-root@vagrant:~/gitrepo/devops-netology/pytest#
+???
 ```
 
 ## Обязательная задача 4
@@ -105,63 +69,12 @@ root@vagrant:~/gitrepo/devops-netology/pytest#
 
 ### Ваш скрипт:
 ```python
-#!/usr/bin/env python3
-
-import socket
-import time
-
-service_list = ["drive.google.com", "mail.google.com", "google.com"]
-tmp_pair = dict()
-
-for init_key in service_list:
-    init_value = socket.gethostbyname(init_key)
-    tmp_pair[init_key] = init_value
-
-
-while (True):
-    for service in service_list:
-        ip_service = socket.gethostbyname(service)
-        print(f"{service} - {ip_service}")
-        if (ip_service != tmp_pair[service]):
-            print(f" [ERROR] {service} IP mismatch: {tmp_pair[service]} {ip_service} ")
-        tmp_pair[service] = ip_service
-    time.sleep(3)
-
+???
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-root@vagrant:~/gitrepo/devops-netology/pytest# ./4.py
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 108.177.14.100
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 108.177.14.100
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 108.177.14.100
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 1.1.1.1
- [ERROR] google.com IP mismatch: 108.177.14.100 1.1.1.1
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 1.1.1.1
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 1.1.1.1
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 1.1.1.1
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 108.177.14.100
- [ERROR] google.com IP mismatch: 1.1.1.1 108.177.14.100
-drive.google.com - 173.194.222.194
-mail.google.com - 74.125.131.19
-google.com - 108.177.14.100
-
+???
 ```
 
 ## Дополнительное задание (со звездочкой*) - необязательно к выполнению
