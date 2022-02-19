@@ -1,238 +1,155 @@
 1.  
-Файл для docker-compose:
+
 ```
-version: "3.9"
-services:
-  postgres:
-    image: postgres:12.10
-    environment:
-      POSTGRES_USER: "tstuser"
-      POSTGRES_PASSWORD: "tstpwd"
-    volumes:
-      - /pgdata:/var/lib/postgresql/data
-      - /pgbackup:/var/pgbackup
-    ports:
-      - "5432:5432"
+
+mysql> status
+--------------
+mysql  Ver 8.0.28 for Linux on x86_64 (MySQL Community Server - GPL)
+
+Connection id:          12
+Current database:
+Current user:           root@localhost
+SSL:                    Not in use
+Current pager:          stdout
+Using outfile:          ''
+Using delimiter:        ;
+Server version:         8.0.28 MySQL Community Server - GPL
+Protocol version:       10
+Connection:             Localhost via UNIX socket
+Server characterset:    utf8mb4
+Db     characterset:    utf8mb4
+Client characterset:    latin1
+Conn.  characterset:    latin1
+UNIX socket:            /var/run/mysqld/mysqld.sock
+Binary data as:         Hexadecimal
+Uptime:                 10 min 36 sec
+
+Threads: 2  Questions: 40  Slow queries: 0  Opens: 137  Flush tables: 3  Open tables: 55  Queries per second avg: 0.062
+--------------
+
+mysql>
+```
+
+```
+mysql>
+mysql> use test;
+Database changed
+mysql>
+mysql> SHOW TABLES;
++----------------+
+| Tables_in_test |
++----------------+
+| orders         |
++----------------+
+1 row in set (0.00 sec)
+
+mysql>
+```
+
+```
+mysql>
+mysql> SELECT COUNT(*) FROM orders WHERE price > 300;
++----------+
+| COUNT(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql>
 ```
 
 2.  
 
 ```
-test_db-# cat \l+
- postgres  | tstuser | UTF8     | en_US.utf8 | en_US.utf8 |                               | 7969 kB | pg_default | default administrative connection database
- template0 | tstuser | UTF8     | en_US.utf8 | en_US.utf8 | =c/tstuser                   +| 7825 kB | pg_default | unmodifiable empty database
-           |         |          |            |            | tstuser=CTc/tstuser           |         |            |
- template1 | tstuser | UTF8     | en_US.utf8 | en_US.utf8 | =c/tstuser                   +| 7825 kB | pg_default | default template for new databases
-           |         |          |            |            | tstuser=CTc/tstuser           |         |            |
- test_db   | tstuser | UTF8     | en_US.utf8 | en_US.utf8 | =Tc/tstuser                  +| 8129 kB | pg_default |
-           |         |          |            |            | tstuser=CTc/tstuser          +|         |            |
-           |         |          |            |            | "test-admin-user"=CTc/tstuser |         |            |
-
-test_db-#
+CREATE USER 'test'@'%' IDENTIFIED WITH mysql_native_password BY 'test-pass'
+WITH MAX_QUERIES_PER_HOUR 100
+PASSWORD EXPIRE INTERVAL 180 DAY
+FAILED_LOGIN_ATTEMPTS 3
+ATTRIBUTE '{"Фамилия": "Pretty", "Имя": "James"}';
 ```
 
 ```
-test_db=# \dS+ clients
-                                                           Table "public.clients"
-      Column       |       Type        | Collation | Nullable |               Default               | Storage  | Stats target | Description
--------------------+-------------------+-----------+----------+-------------------------------------+----------+--------------+-------------
- id                | integer           |           | not null | nextval('clients_id_seq'::regclass) | plain    |              |
- фамилия           | character varying |           |          |                                     | extended |              |
- страна проживания | character varying |           |          |                                     | extended |              |
- заказ             | integer           |           |          |                                     | plain    |              |
-Indexes:
-    "clients_pkey" PRIMARY KEY, btree (id)
-Foreign-key constraints:
-    "clients_fk" FOREIGN KEY ("заказ") REFERENCES orders(id)
-Access method: heap
+mysql>
+mysql> SELECT * FROM INFORMATION_SCHEMA.USER_ATTRIBUTES WHERE USER = 'test';
++------+------+-------------------------------------------------+
+| USER | HOST | ATTRIBUTE                                       |
++------+------+-------------------------------------------------+
+| test | %    | {"Имя": "James", "Фамилия": "Pretty"} |
++------+------+-------------------------------------------------+
+1 row in set (0.01 sec)
 
-test_db=#
-test_db=#
-test_db=#
-test_db=# \dS+ orders
-                                                        Table "public.orders"
-    Column    |       Type        | Collation | Nullable |              Default               | Storage  | Stats target | Description
---------------+-------------------+-----------+----------+------------------------------------+----------+--------------+-------------
- id           | integer           |           | not null | nextval('orders_id_seq'::regclass) | plain    |              |
- наименование | character varying |           |          |                                    | extended |              |
- цена         | integer           |           |          |                                    | plain    |              |
-Indexes:
-    "orders_pkey" PRIMARY KEY, btree (id)
-Referenced by:
-    TABLE "clients" CONSTRAINT "clients_fk" FOREIGN KEY ("заказ") REFERENCES orders(id)
-Access method: heap
-
-test_db=#
-
-```
-
-```
-test_db=# SELECT grantee, table_catalog , table_name , privilege_type FROM information_schema.role_table_grants where table_name = 'clients' or table_name = 'orders';
-     grantee      | table_catalog | table_name | privilege_type
-------------------+---------------+------------+----------------
- tstuser          | test_db       | orders     | INSERT
- tstuser          | test_db       | orders     | SELECT
- tstuser          | test_db       | orders     | UPDATE
- tstuser          | test_db       | orders     | DELETE
- tstuser          | test_db       | orders     | TRUNCATE
- tstuser          | test_db       | orders     | REFERENCES
- tstuser          | test_db       | orders     | TRIGGER
- test-simple-user | test_db       | orders     | INSERT
- test-simple-user | test_db       | orders     | SELECT
- test-simple-user | test_db       | orders     | UPDATE
- test-simple-user | test_db       | orders     | DELETE
- test-admin-user  | test_db       | orders     | INSERT
- test-admin-user  | test_db       | orders     | SELECT
- test-admin-user  | test_db       | orders     | UPDATE
- test-admin-user  | test_db       | orders     | DELETE
- test-admin-user  | test_db       | orders     | TRUNCATE
- test-admin-user  | test_db       | orders     | REFERENCES
- test-admin-user  | test_db       | orders     | TRIGGER
- tstuser          | test_db       | clients    | INSERT
- tstuser          | test_db       | clients    | SELECT
- tstuser          | test_db       | clients    | UPDATE
- tstuser          | test_db       | clients    | DELETE
- tstuser          | test_db       | clients    | TRUNCATE
- tstuser          | test_db       | clients    | REFERENCES
- tstuser          | test_db       | clients    | TRIGGER
- test-simple-user | test_db       | clients    | INSERT
- test-simple-user | test_db       | clients    | SELECT
- test-simple-user | test_db       | clients    | UPDATE
- test-simple-user | test_db       | clients    | DELETE
- test-admin-user  | test_db       | clients    | INSERT
- test-admin-user  | test_db       | clients    | SELECT
- test-admin-user  | test_db       | clients    | UPDATE
- test-admin-user  | test_db       | clients    | DELETE
- test-admin-user  | test_db       | clients    | TRUNCATE
- test-admin-user  | test_db       | clients    | REFERENCES
- test-admin-user  | test_db       | clients    | TRIGGER
+mysql>
 ```
 
 3.  
+
+используется Innodb:
 ```
-test_db=# SELECT COUNT(*) from clients;
- count
--------
-     5
-(1 row)
+mysql> SHOW TABLE STATUS FROM test;
++--------+--------+---------+------------+------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+---------------------+------------+--------------------+----------+----------------+---------+
+| Name   | Engine | Version | Row_format | Rows | Avg_row_length | Data_length | Max_data_length | Index_length | Data_free | Auto_increment | Create_time         | Update_time         | Check_time | Collation          | Checksum | Create_options | Comment |
++--------+--------+---------+------------+------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+---------------------+------------+--------------------+----------+----------------+---------+
+| orders | InnoDB |      10 | Dynamic    |    5 |           3276 |       16384 |               0 |            0 |         0 |              6 | 2022-02-19 18:41:47 | 2022-02-19 18:41:47 | NULL       | utf8mb4_0900_ai_ci |     NULL |                |         |
++--------+--------+---------+------------+------+----------------+-------------+-----------------+--------------+-----------+----------------+---------------------+---------------------+------------+--------------------+----------+----------------+---------+
+1 row in set (0.01 sec)
 
-test_db=#
-test_db=# SELECT COUNT(*) from orders;
- count
--------
-     5
-(1 row)
-
-test_db=#
+mysql>
 ```
 
+Время запроса при InnoDB:  
+```
+ 13 | 0.02041475 | select * from orders                       |
+```
+
+Время запроса при MyISAM (смена движка ALTER TABLE orders ENGINE=MyISAM;):  
+```
+ 17 | 0.00105975 | select * from orders  
+```
 
 4.  
-```
-UPDATE clients SET заказ=3 WHERE id=1;
-UPDATE clients SET заказ=4 WHERE id=2;
-UPDATE clients SET заказ=5 WHERE id=3;
-```
 
 ```
-test_db=# SELECT * FROM clients WHERE заказ IS NOT null;
- id |       фамилия        | страна проживания | заказ
-----+----------------------+-------------------+-------
-  1 | Иванов Иван Иванович | USA               |     3
-  2 | Петров Петр Петрович | Canada            |     4
-  3 | Иоганн Себастьян Бах | Japan             |     5
-(3 rows)
+root@4565d5bf7c1f:/# cat /etc/mysql/my.cnf
+# Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
-test_db=#
-```
+#
+# The MySQL  Server configuration file.
+#
+# For explanations see
+# http://dev.mysql.com/doc/mysql/en/server-system-variables.html
 
-5.  
+[mysqld]
+pid-file        = /var/run/mysqld/mysqld.pid
+socket          = /var/run/mysqld/mysqld.sock
+datadir         = /var/lib/mysql
+secure-file-priv= NULL
 
-```
-test_db=#
-test_db=# EXPLAIN SELECT * FROM clients WHERE заказ IS NOT null;
-                        QUERY PLAN
------------------------------------------------------------
- Seq Scan on clients  (cost=0.00..18.10 rows=806 width=72)
-   Filter: ("заказ" IS NOT NULL)
-(2 rows)
+default-storage-engine = innodb
+innodb_flush_method=O_DSYNC
+innodb_flush_log_at_trx_commit = 2
+innodb_file_per_table=1
+innodb_file_format=Barracuda
+innodb_log_buffer_size = 1M
+innodb_buffer_pool_size = 600M
+innodb_log_file_size = 100M
 
-test_db=#
-```
-Видим вес/стоимость, ожидаемое число строк и их размер, да фильтр.
-
-6.  
-
-Смотрим какой id контейнера с постресс, заходим в него:
-
-```
-root@vagrant:/# docker ps
-CONTAINER ID   IMAGE            COMMAND                  CREATED       STATUS       PORTS                                       NAMES
-1240824a5541   postgres:12.10   "docker-entrypoint.s…"   3 hours ago   Up 3 hours   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   62_postgres_1
-root@vagrant:/#
-root@vagrant:/#
-root@vagrant:/# docker exec -it 1240824a5541 bash
-root@1240824a5541:/#
-```
-
-Делаем дамп:
-```
-root@1240824a5541:/# pg_dump -Utstuser test_db > /var/pgbackup/test_db.sql
-```
-
-Поднимаем новый инстанс постгри на другом порту, с прокинутым volume для бэкапов:
-```
-root@vagrant:~/docker/netology/6.2# docker run -it -v /pgbackup:/var/pg/backup -p 5433:5432 -e POSTGRES_PASSWORD=tstpwd  postgres:12.10
-```
-
-Ищем его id и заходим в него:
-```
-root@vagrant:/home/vagrant# docker ps
-CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS                                       NAMES
-b8b825f8276d   postgres:12.10   "docker-entrypoint.s…"   4 minutes ago   Up 4 minutes   0.0.0.0:5433->5432/tcp, :::5433->5432/tcp   suspicious_moser
-1240824a5541   postgres:12.10   "docker-entrypoint.s…"   4 hours ago     Up 4 hours     0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   62_postgres_1
-root@vagrant:/home/vagrant#
-root@vagrant:/home/vagrant# docker exec -it b8b825f8276d bash
-root@b8b825f8276d:/#
-root@b8b825f8276d:/#
-
-```
-Подключаемся к постре, создаём БД и вливаем в неё дамп, конектимся к БД и проверяем:
-
-```
-root@b8b825f8276d:/# psql -Upostgres
-psql (12.10 (Debian 12.10-1.pgdg110+1))
-Type "help" for help.
-
-postgres=#
-postgres=#
-postgres=#
-postgres=# CREATE DATABASE tstdb;
-CREATE DATABASE
-postgres=#
-\q
-root@b8b825f8276d:/#
-root@b8b825f8276d:/#
-root@b8b825f8276d:/# psql tstdb < /var/pg/backup/test_db.sql
-psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "root" does not exist
-root@b8b825f8276d:/# psql -Upostgres tstdb < /var/pg/backup/test_db.sql
-....
-
-postgres=# \c tstdb
-tstdb=# select * from clients
-tstdb-# ;
- id |       фамилия        | страна проживания | заказ
-----+----------------------+-------------------+-------
-  5 | Ritchie Blackmore    | Russia            |
-  4 | Ронни Джеймс Дио     | Russia            |
-  1 | Иванов Иван Иванович | USA               |     3
-  2 | Петров Петр Петрович | Canada            |     4
-  3 | Иоганн Себастьян Бах | Japan             |     5
-(5 rows)
-
-tstdb=#
-
-
+# Custom config should go here
+!includedir /etc/mysql/conf.d/
+root@4565d5bf7c1f:/#
 ```
 
 
