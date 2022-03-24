@@ -1,0 +1,28 @@
+version: 3
+projects:
+- name: devops-netology
+  dir: terraform
+  workspace: stage
+  autoplan:
+    when_modified: ["*.tf", "../modules/**/*.tf"]
+    enabled: true
+  workflow: myworkflow
+
+  dir: terraform
+  workspace: prod
+  autoplan:
+    when_modified: ["*.tf", "../modules/**/*.tf"]
+    enabled: true
+  workflow: myworkflow
+
+workflows:
+  myworkflow:
+    plan:
+      steps:
+      - init
+      - plan:
+          extra_args: ["-lock", "false"]
+    apply:
+      steps:
+      - apply
+
