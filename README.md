@@ -3,8 +3,8 @@
 
 2.  
 
-(https://github.com/Danil054/devops-netology/blob/main/atlantis/server.yaml)
-(https://github.com/Danil054/devops-netology/blob/main/atlantis/atlantis.yaml)
+(https://github.com/Danil054/devops-netology/blob/main/atlantis/server.yaml)  
+(https://github.com/Danil054/devops-netology/blob/main/atlantis/atlantis.yaml)  
 
 3.  
 
@@ -86,4 +86,4 @@ module "ec2_instance" {
 }
 
 ```
-проверить нет возможности, так как не зарегистрироваться нормально на aws.
+проверить нет возможности, так как не зарегистрироваться нормально на aws.  
