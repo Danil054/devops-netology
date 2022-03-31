@@ -1,89 +1,69 @@
 1.  
-*
++
 
 2.  
-
-(https://github.com/Danil054/devops-netology/blob/main/atlantis/server.yaml)  
-(https://github.com/Danil054/devops-netology/blob/main/atlantis/atlantis.yaml)  
++
 
 3.  
 
-Что-то от aws прям с пометкой официально модуля найти не смог, зато сразу находится модуль:  
+Программа для перевода метров в футы:  
+```
+package main
 
-(https://github.com/terraform-aws-modules/terraform-aws-ec2-instance)  
-Использовать его особо смысла не вижу для себя на данном этапе, можно обойтись и aws_instance, если бы вообще aws пускало и дало зарегистрировать карту   
-Если посмотреть его main.tf и что там сейчас на первых строчках:  
-```
-locals {
-  create = var.create && var.putin_khuylo
-```
-То вообще отпадает желание пользоваться данным модулем.  
+import "fmt"
 
-Создание инстансана через модуль, думаю, выглядело бы так:  
+func main() {
+    fmt.Print("Введите метры: ")
+    var input float64
+    fmt.Scanf("%f", &input)
+
+    output := input * (1 / 0.3048)
+
+    fmt.Println("В", input, "метрах", output, "футов")
+}
 ```
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.0"
+
+Поиск минимального числа в списке:  
+```
+package main
+
+import "fmt"
+
+func main() {
+    var min int
+
+    x := []int{48, 96, 86, 68, 57, 82, 63, 70, 37, 34, 83, 27, 19, 97, 9, 17}
+
+    min = x[0]
+
+    for i := 0; i < len(x); i++ {
+
+	if x[i] < min {
+	    min = x[i]
+	}
+
     }
-  }
+
+    fmt.Println(min)
 }
-
-# Configure the AWS Provider
-provider "aws" {
-  region = "us-east-1"
-}
-
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
-}
-
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "172.16.0.0/16"
-
-  tags = {
-    Name = "tf"
-  }
-}
-
-resource "aws_subnet" "my_subnet" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "172.16.10.0/24"
-  availability_zone = "us-west-2a"
-
-  tags = {
-    Name = "tf"
-  }
-}
-
-module "ec2_instance" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 3.0"
-
-  name = "single-instance"
-
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.my_subnet.id
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
-}
-
 ```
-проверить нет возможности, так как не зарегистрироваться нормально на aws.  
+
+Вывод чисел от 1 до 100, делящихся на три:   
+```
+package main
+
+import "fmt"
+
+func main() {
+
+    for i := 1; i <= 100; i++ {
+
+	if i%3 == 0 {
+	    fmt.Println(i)
+	}
+
+    }
+
+}
+```
+
