@@ -1,69 +1,76 @@
 1.  
-+
 
-2.  
-+
+Найдите, где перечислены все доступные resource и data_source:  
 
-3.  
+(https://github.com/hashicorp/terraform-provider-aws/blob/55e9157c3ba093b834b30400e4dd045d8b26d518/internal/provider/provider.go#L412)  
 
-Программа для перевода метров в футы:  
+сперва DataSource идут, потом resource  
+
+
+
+Для создания очереди сообщений SQS используется ресурс aws_sqs_queue у которого есть параметр name.  
+С каким другим параметром конфликтует name? Приложите строчку кода, в которой это указано.  
+
+Конфликтует с параметром "name_prefix":  
+(https://github.com/hashicorp/terraform-provider-aws/blob/55e9157c3ba093b834b30400e4dd045d8b26d518/internal/service/sqs/queue.go#L82)  
 ```
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Print("Введите метры: ")
-    var input float64
-    fmt.Scanf("%f", &input)
-
-    output := input * (1 / 0.3048)
-
-    fmt.Println("В", input, "метрах", output, "футов")
-}
-```
-
-Поиск минимального числа в списке:  
-```
-package main
-
-import "fmt"
-
-func main() {
-    var min int
-
-    x := []int{48, 96, 86, 68, 57, 82, 63, 70, 37, 34, 83, 27, 19, 97, 9, 17}
-
-    min = x[0]
-
-    for i := 0; i < len(x); i++ {
-
-	if x[i] < min {
-	    min = x[i]
-	}
-
-    }
-
-    fmt.Println(min)
-}
+                "name": {
+                        Type:          schema.TypeString,
+                        Optional:      true,
+                        Computed:      true,
+                        ForceNew:      true,
+                        ConflictsWith: []string{"name_prefix"},
+                },
+                "name_prefix": {
+                        Type:          schema.TypeString,
+                        Optional:      true,
+                        Computed:      true,
+                        ForceNew:      true,
+                        ConflictsWith: []string{"name"},
 ```
 
-Вывод чисел от 1 до 100, делящихся на три:   
+Какая максимальная длина имени?  
+Судя по коду ниже, максимальная длина 80 символов:  
 ```
-package main
+func resourceQueueCustomizeDiff(_ context.Context, diff *schema.ResourceDiff, meta interface{}) error {
+        fifoQueue := diff.Get("fifo_queue").(bool)
+        contentBasedDeduplication := diff.Get("content_based_deduplication").(bool)
 
-import "fmt"
+        if diff.Id() == "" {
+                // Create.
 
-func main() {
+                var name string
 
-    for i := 1; i <= 100; i++ {
+                if fifoQueue {
+                        name = create.NameWithSuffix(diff.Get("name").(string), diff.Get("name_prefix").(string), FIFOQueueNameSuffix)
+                } else {
+                        name = create.Name(diff.Get("name").(string), diff.Get("name_prefix").(string))
+                }
 
-	if i%3 == 0 {
-	    fmt.Println(i)
-	}
+                var re *regexp.Regexp
 
-    }
+                if fifoQueue {
+                        re = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,75}\.fifo$`)
+                } else {
+                        re = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,80}$`)
+                }
 
-}
+                if !re.MatchString(name) {
+                        return fmt.Errorf("invalid queue name: %s", name)
+                }
+        }
+
+        if !fifoQueue && contentBasedDeduplication {
+                return fmt.Errorf("content-based deduplication can only be set for FIFO queue")
+        }
+```
+
+Какому регулярному выражению должно подчиняться имя?  
+см. код выше:  
+```
+if fifoQueue {
+                        re = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,75}\.fifo$`)
+                } else {
+                        re = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,80}$`)
 ```
 
