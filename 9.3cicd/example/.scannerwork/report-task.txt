@@ -1,0 +1,6 @@
+projectKey=snr1
+serverUrl=http://51.250.100.176:9000
+serverVersion=9.1.0.47736
+dashboardUrl=http://51.250.100.176:9000/dashboard?id=snr1
+ceTaskId=AYElbz4GP7fYNXUVpA1-
+ceTaskUrl=http://51.250.100.176:9000/api/ce/task?id=AYElbz4GP7fYNXUVpA1-
