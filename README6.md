@@ -1,4 +1,5 @@
 1. Опишите основные плюсы и минусы pull и push систем мониторинга.  
+  
 PUSH системы менее требовательны к сети, так как отправка по UDP, что позволит с большей производительностью получать метрики  
 PUSH системы более гибки в плане настройки и отправки метрик, настройки для отправки в несколько серверов  
 Но и недостатки есть, нет гарантии доставки метрик в сервер мониторинга  
@@ -7,19 +8,24 @@ PULL системы использует конкретные опрашивае
 Из недостатков - более требовательны к качеству канала связи  
 
 2.  
+  
 PUSH системы:  
-TICK  
-VictoriaMetrics  
+ TICK  
+ VictoriaMetrics  
   
 PULL системы:  
-Prometheus  
-Nagios  
+ Prometheus  
+ Nagios  
 
 Гибридные системы:  
-Zabbix  
+ Zabbix  
   
   
 3.  
+  
+Запустили TICK-стэк, используя технологии docker и docker-compose.  
+
+Вывод команды ``` curl http://localhost:8086/ping ```:  
 ```
 root@vagrant:~/gitrepo/TICK/sandbox#
 root@vagrant:~/gitrepo/TICK/sandbox# curl http://localhost:8086/ping
@@ -46,11 +52,13 @@ root@vagrant:~/gitrepo/TICK/sandbox# curl http://localhost:8086/ping -v
 root@vagrant:~/gitrepo/TICK/sandbox#
 ```
 
+Вывод команды ``` curl http://localhost:8888 ```:  
 ```
 root@vagrant:~/gitrepo/TICK/sandbox# curl http://localhost:8888
 <!DOCTYPE html><html><head><meta http-equiv="Content-type" content="text/html; charset=utf-8"><title>Chronograf</title><link rel="icon shortcut" href="/favicon.fa749080.ico"><link rel="stylesheet" href="/src.9cea3e4e.css"></head><body> <div id="react-root" data-basepath=""></div> <script src="/src.a969287c.js"></script> </body></html>
 ```
 
+Вывод команды ``` curl http://localhost:9092/kapacitor/v1/ping ```:  
 ```
 root@vagrant:~/gitrepo/TICK/sandbox#
 root@vagrant:~/gitrepo/TICK/sandbox# curl http://localhost:9092/kapacitor/v1/ping
@@ -75,13 +83,11 @@ root@vagrant:~/gitrepo/TICK/sandbox# curl http://localhost:9092/kapacitor/v1/pin
 root@vagrant:~/gitrepo/TICK/sandbox#
 ```
   
-chronograf: (https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick.png)  
+[Скриншот веб-интерфейса ПО chronografchronograf](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick.png)  
 
 4.  
-Скриншот с отображением метрик утилизации места на диске:  
-(https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-disk.png)  
+[Скриншот с отображением метрик утилизации места на диске](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-disk.png)  
   
 5.  
-Docker plugin:  
-(https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-docker.png)  
+[Метрики, связанные с docker](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-docker.png)  
 
