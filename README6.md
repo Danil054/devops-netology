@@ -1,4 +1,4 @@
-1. Опишите основные плюсы и минусы pull и push систем мониторинга.  
+#1. Опишите основные плюсы и минусы pull и push систем мониторинга.  
   
 PUSH системы менее требовательны к сети, так как отправка по UDP, что позволит с большей производительностью получать метрики  
 PUSH системы более гибки в плане настройки и отправки метрик, настройки для отправки в несколько серверов  
@@ -7,7 +7,7 @@ PULL модель более контролируемая, имеется гар
 PULL системы использует конкретные опрашиваемые "точки", что не позволит влить "левые" данные в систему  
 Из недостатков - более требовательны к качеству канала связи  
 
-2.  
+#2. Какие из ниже перечисленных систем относятся к push модели, а какие к pull? А может есть гибридные?
   
 PUSH системы:  
  TICK  
@@ -21,9 +21,9 @@ PULL системы:
  Zabbix  
   
   
-3.  
+#3. Склонируйте себе репозиторий и запустите TICK-стэк, используя технологии docker и docker-compose.
   
-Запустили TICK-стэк, используя технологии docker и docker-compose.  
+Склонировали репозиторий и запустили TICK-стэк, используя технологии docker и docker-compose.  
 
 Вывод команды ``` curl http://localhost:8086/ping ```:  
 ```
@@ -83,11 +83,9 @@ root@vagrant:~/gitrepo/TICK/sandbox# curl http://localhost:9092/kapacitor/v1/pin
 root@vagrant:~/gitrepo/TICK/sandbox#
 ```
   
-[Скриншот веб-интерфейса ПО chronografchronograf](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick.png)  
+[Скриншот веб-интерфейса ПО chronograf](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick.png)  
 
-4.  
-[Скриншот с отображением метрик утилизации места на диске](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-disk.png)  
+4. [Скриншот с отображением метрик утилизации места на диске](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-disk.png)  
   
-5.  
-[Метрики, связанные с docker](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-docker.png)  
+5. [Метрики, связанные с docker](https://github.com/Danil054/devops-netology/blob/main/pics/screen-tick-docker.png)  
 
