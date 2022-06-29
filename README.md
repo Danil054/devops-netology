@@ -24,5 +24,5 @@
 
 #### Задание 4 
 
-[Дашбоард созранён в JSON модели](https://github.com/Danil054/devops-netology/blob/main/grafana/grafana-json-model.json) 
+[Дашбоард сохранён в JSON модели](https://github.com/Danil054/devops-netology/blob/main/grafana/grafana-json-model.json) 
 
