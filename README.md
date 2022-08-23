@@ -1,49 +1,50 @@
-## Задача 1: API Gateway  
-### Рассмотрим следующие решения API Gateway.
-1. Tyk: (https://tyk.io/open-source-api-gateway/)  
-поддерживает:  
-Маршрутизация запросов к нужному сервису на основе конфигурации  
-Обеспечение терминации HTTPS  
-не нашёл, может и поддерживает:  
-Возможность проверки аутентификационной информации в запросах  
+## Задача 1: Установить Minikube  
+Установили на Windows c Virtualbox  
+Запустили командой:  
+```
+minikube start --vm-driver=virtualbox
+```
 
-2. Zuul (от netflix) (https://github.com/Netflix/zuul/wiki)  
-поддерживает:  
-Маршрутизация запросов к нужному сервису на основе конфигурации  
-Обеспечение терминации HTTPS  
-Возможность проверки аутентификационной информации в запросах  
+Видим запущенные системные поды:  
+```
+C:\Windows\system32>kubectl get pods --namespace=kube-system
+NAME                               READY   STATUS    RESTARTS      AGE
+coredns-6d4b75cb6d-54d87           1/1     Running   0             31m
+etcd-minikube                      1/1     Running   0             31m
+kube-apiserver-minikube            1/1     Running   0             31m
+kube-controller-manager-minikube   1/1     Running   0             31m
+kube-proxy-24qtg                   1/1     Running   0             31m
+kube-scheduler-minikube            1/1     Running   0             31m
+storage-provisioner                1/1     Running   1 (30m ago)   31m
+```
 
-3. Nginx  
-поддерживает:  
-Маршрутизация запросов к нужному сервису на основе конфигурации  
-Обеспечение терминации HTTPS  
-Возможность проверки аутентификационной информации в запросах  
+## Задача 2: Запуск Hello World  
+Создали деплоймент для приложения командой:  
+```
+kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
+```
+Сделали под доступным по сети командой:  
+```
+kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+```
+Просмотр сервиса команой:  
+```
+C:\Windows\system32>kubectl get services
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+hello-node   LoadBalancer   10.108.45.71   <pending>     8080:32557/TCP   29m
+kubernetes   ClusterIP      10.96.0.1      <none>        443/TCP          35m
+```
+Установили аддоны командами:  
+```
+minikube addons enable dashboard
+minikube addons enable ingress
+```
 
-Я бы для начала попробовал API Gateway сделать на nginx [пример](https://www.nginx.com/blog/deploying-nginx-plus-as-an-api-gateway-part-1/)
-если нет необходимости в преобразовании множества протоколов обмена данными через API.  
-Для nginx в интернете множество документации и примеров.  
-
-## Задача 2: Брокер сообщений  
-### Рассмотрим следующие решения  
-
-1. Apache Kafka  
-Поддержка кластеризации для обеспечения надежности +  
-Хранение сообщений на диске в процессе доставки +  
-Высокая скорость работы +  
-Поддержка различных форматов сообщений (собственный протокол)  
-Разделение прав доступа к различным потокам сообщений +  
-Протота эксплуатации -  
-
-2. RabbitMQ  
-Поддержка кластеризации для обеспечения надежности +  
-Хранение сообщений на диске в процессе доставки +  
-Высокая скорость работы +  
-Поддержка различных форматов сообщений  (протокол AMQP)  
-Разделение прав доступа к различным потокам сообщений +  
-Протота эксплуатации +  
-
-Для первоначального использования я бы выбрал RabbitMQ  
-так как он проще устанавливается/настраивается и обеспечевает, необходимым функционалом, для большинства систем  
-
-
+## Задача 3: Установить kubectl  
+kubectl установили, можно подключаться к кластеру mimikube:  
+```
+C:\Windows\system32>kubectl get nodes
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   39m   v1.24.3
+```
 
