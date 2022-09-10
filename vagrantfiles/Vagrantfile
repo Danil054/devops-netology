@@ -1,0 +1,47 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "vg1" do |vg1|
+    vg1.vm.boot_timeout = 900
+    vg1.vm.box = "bento/ubuntu-20.04"
+    vg1.vm.network "public_network", ip: "192.168.31.201"
+    vg1.vm.provider "virtualbox" do |v1|
+        v1.memory = 2048
+        v1.cpus = 2
+    end
+  end
+  config.vm.define "vg2" do |vg2|
+    vg2.vm.boot_timeout = 900
+    vg2.vm.box = "bento/ubuntu-20.04"
+    vg2.vm.network "public_network", ip: "192.168.31.202"
+    vg2.vm.provider "virtualbox" do |v2|
+        v2.memory = 1024
+        v2.cpus = 2
+    end
+  end
+  config.vm.define "vg3" do |vg3|
+    vg3.vm.boot_timeout = 900
+    vg3.vm.box = "bento/ubuntu-20.04"
+    vg3.vm.network "public_network", ip: "192.168.31.203"
+    vg3.vm.provider "virtualbox" do |v3|
+        v3.memory = 1024
+        v3.cpus = 2
+    end
+  end
+  config.vm.define "vg4" do |vg4|
+    vg4.vm.boot_timeout = 900
+    vg4.vm.box = "bento/ubuntu-20.04"
+    vg4.vm.network "public_network", ip: "192.168.31.204"
+    vg4.vm.provider "virtualbox" do |v4|
+        v4.memory = 1024
+        v4.cpus = 2
+    end
+  end
+  config.vm.define "vg5" do |vg5|
+    vg5.vm.boot_timeout = 900
+    vg5.vm.box = "bento/ubuntu-20.04"
+    vg5.vm.network "public_network", ip: "192.168.31.205"
+    vg5.vm.provider "virtualbox" do |v5|
+        v5.memory = 1024
+        v5.cpus = 2
+    end
+  end
+end
