@@ -1,6 +1,6 @@
 ## Задание 1: подготовить тестовый конфиг для запуска приложения  
 
-Создадим два неймспэйса stage и prodaction  
+Создадим два неймспэйса stage и production  
 Применив файлы:  
 ```
 kubectl apply -f ns-production.yaml,ns-stage.yaml
