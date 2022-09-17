@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    apps: front-back
+  name: front-back
+  namespace: stage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      apps: front-back
+  template:
+    metadata:
+      labels:
+        apps: front-back
+    spec:
+      containers:
+        - image: 192.168.31.63:5000/backend
+          name: backend
+          ports:
+            - containerPort: 9000
+          resources: {}
+          env:
+            - name: DATABASE_URL
+              value: "postgres://postgres:postgres@db:5432/news"
+        - image: 192.168.31.63:5000/frontend
+          name: frontend
+          ports:
+            - containerPort: 80
+          resources: {}
+          env:
+            - name: BASE_URL
+              value: "http://localhost:9000"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-back
+  namespace: stage
+spec:
+  type: NodePort
+  ports:
+    - name: "8000"
+      protocol: TCP
+      port: 8000
+      targetPort: 80
+  selector:
+    apps: front-back
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    dbs: db
+  name: db
+  namespace: stage
+spec:
+  serviceName: db
+  replicas: 1
+  selector:
+    matchLabels:
+      dbs: db
+  template:
+    metadata:
+      labels:
+        dbs: db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: news
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:13-alpine
+          name: db
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - name: db-volume
+              mountPath: /var/lib/postgresql/data
+      restartPolicy: Always
+      volumes:
+        - name: db-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: stage
+spec:
+  type: NodePort
+  ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
+  selector:
+    dbs: db
