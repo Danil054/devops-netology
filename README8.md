@@ -33,10 +33,10 @@ pod/db-0                        1/1     Running   0          12s   10.233.102.15
 pod/frontend-66579546fc-8qz78   1/1     Running   0          20m   10.233.102.153   node1   <none>           <none>
 
 NAME                                                        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM            STORAGECLASS   REASON   AGE   VOLUMEMODE
-persistentvolume/pvc-2262e1d0-f81b-48c3-adc8-588216804f39   1Gi        RWO            Delete           Bound    production/pvc   nfs                     16m   Filesystem
+persistentvolume/pvc-2262e1d0-f81b-48c3-adc8-588216804f39   1Gi        RWX            Delete           Bound    production/pvc   nfs                     16m   Filesystem
 
 NAME                        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE   VOLUMEMODE
-persistentvolumeclaim/pvc   Bound    pvc-2262e1d0-f81b-48c3-adc8-588216804f39   1Gi        RWO            nfs            16m   Filesystem
+persistentvolumeclaim/pvc   Bound    pvc-2262e1d0-f81b-48c3-adc8-588216804f39   1Gi        RWX            nfs            16m   Filesystem
 root@vagrant:~/kub13-2#
 
 ```
