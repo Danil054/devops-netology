@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc
+  namespace: production
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    apps: frontend
+  name: frontend
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      apps: frontend
+  template:
+    metadata:
+      labels:
+        apps: frontend
+    spec:
+      containers:
+        - image: 192.168.31.63:5000/frontend
+          name: frontend
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: "/static"
+              name: static-volume
+          env:
+            - name: BASE_URL
+              value: "http://backend:9000"
+      restartPolicy: Always
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    apps: backend
+  name: backend
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      apps: backend
+  template:
+    metadata:
+      labels:
+        apps: backend
+    spec:
+      containers:
+        - image: 192.168.31.63:5000/backend
+          name: backend
+          ports:
+            - containerPort: 9000
+          resources: {}
+          volumeMounts:
+            - mountPath: "/static"
+              name: static-volume
+          env:
+            - name: DATABASE_URL
+              value: "postgres://postgres:postgres@db:5432/news"
+      restartPolicy: Always
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: production
+spec:
+  type: NodePort
+  ports:
+    - name: "8000"
+      protocol: TCP
+      port: 8000
+      targetPort: 80
+  selector:
+    apps: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: production
+spec:
+  type: NodePort
+  ports:
+    - name: "9000"
+      protocol: TCP
+      port: 9000
+      targetPort: 9000
+  selector:
+    apps: backend
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    dbs: db
+  name: db
+  namespace: production
+spec:
+  serviceName: db
+  replicas: 1
+  selector:
+    matchLabels:
+      dbs: db
+  template:
+    metadata:
+      labels:
+        dbs: db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: news
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:13-alpine
+          name: db
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - name: db-volume
+              mountPath: /var/lib/postgresql/data
+      restartPolicy: Always
+      volumes:
+        - name: db-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: production
+spec:
+  type: NodePort
+  ports:
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
+  selector:
+    dbs: db
