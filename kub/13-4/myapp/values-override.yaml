@@ -1,0 +1,11 @@
+replicaCount: 1
+
+appname: mynginx-v2
+nsname: stage
+
+imgname: nginx
+imgtag: 1.22
+
+appPort: 80
+
+

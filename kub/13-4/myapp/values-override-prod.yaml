@@ -1,0 +1,11 @@
+replicaCount: 1
+
+appname: mynginx
+nsname: prod
+
+imgname: nginx
+imgtag: 1.22
+
+appPort: 80
+
+

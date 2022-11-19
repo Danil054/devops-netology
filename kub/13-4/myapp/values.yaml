@@ -1,0 +1,9 @@
+replicaCount: 1
+
+appname: mynginx
+nsname: stage
+
+imgname: nginx
+imgtag: latest
+
+appPort: 80

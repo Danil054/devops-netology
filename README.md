@@ -1,72 +1,78 @@
-## Задание 1: подготовить тестовый конфиг для запуска приложения  
+## Задание 1: подготовить helm чарт для приложения  
+Подготовили небольшой Helm chart: myapp, на примере образа nginx:
+myapp [myapp]https://github.com/Danil054/devops-netology/blob/main/kub/13-4/myapp)  
 
-Создадим два неймспэйса stage и production  
-Применив файлы:  
+##Задание 2: запустить 2 версии в разных неймспейсах
+Запустим установку приложения в первом нэймспейсе (stage), для двух разных версий, командами:  
 ```
-kubectl apply -f ns-production.yaml,ns-stage.yaml
-```
-Содержание файлов:  
-```
-root@vagrant:~/kub13-1/13-kubernetes-config# cat ns-stage.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: stage
+ helm install myapp1 myapp
+ helm install myapp2 myapp -f ./myapp/values-override.yaml 
 
-root@vagrant:~/kub13-1/13-kubernetes-config# cat ns-production.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: production
 ```
 
-Подготовили yaml файл для запуска в stage окружении: [deploystage.yaml](https://github.com/Danil054/devops-netology/blob/main/kub/deploystage.yaml)  
-
-После его применения:  
+Запустим установку приложения в другом нэймспейсе (prod):  
 ```
- kubectl apply -f deploystage.yaml
-```
-Запустились поды и сервисы в stage наймспэйсе:  
-```
-root@vagrant:~/kub13-1/13-kubernetes-config# kubectl get pods -n stage -o wide
-NAME                         READY   STATUS    RESTARTS   AGE   IP             NODE    NOMINATED NODE   READINESS GATES
-db-0                         1/1     Running   0          49m   10.233.74.77   node4   <none>           <none>
-front-back-fb58c9457-xx8pv   2/2     Running   0          50m   10.233.71.18   node3   <none>           <none>
-root@vagrant:~/kub13-1/13-kubernetes-config#
-root@vagrant:~/kub13-1/13-kubernetes-config#
-root@vagrant:~/kub13-1/13-kubernetes-config# kubectl get services -n stage -o wide
-NAME         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
-db           NodePort   10.233.0.106    <none>        5432:30725/TCP   52m   dbs=db
-front-back   NodePort   10.233.30.159   <none>        8000:30772/TCP   52m   apps=front-back
-root@vagrant:~/kub13-1/13-kubernetes-config#
+helm install myapp-prod myapp -f ./myapp/values-override-prod.yaml
 ```
 
-## Задание 2: подготовить конфиг для production окружения  
+Проверяем, посмотрим все поды в stage:  
+```
+root@vagrant:~/kub13-4#
+root@vagrant:~/kub13-4# kubectl get all -n stage
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/mynginx-6777d846b-5jnwt       1/1     Running   0          4m1s
+pod/mynginx-v2-7577cb54b9-p624x   1/1     Running   0          3m37s
 
-Подготовили yaml файл для запуска в production окружении: [deployprod.yaml](https://github.com/Danil054/devops-netology/blob/main/kub/deployprod.yaml)  
-Применяем его:  
-```
-root@vagrant:~/kub13-1/13-kubernetes-config# kubectl apply -f deployprod.yaml
-deployment.apps/frontend created
-deployment.apps/backend created
-service/frontend created
-service/backend created
-statefulset.apps/db created
-service/db created
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/mynginx      ClusterIP   10.233.25.0     <none>        80/TCP    4m1s
+service/mynginx-v2   ClusterIP   10.233.22.115   <none>        80/TCP    3m37s
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mynginx      1/1     1            1           4m1s
+deployment.apps/mynginx-v2   1/1     1            1           3m37s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/mynginx-6777d846b       1         1         1       4m1s
+replicaset.apps/mynginx-v2-7577cb54b9   1         1         1       3m37s
+root@vagrant:~/kub13-4#
+
 ```
 
-Проверяем запущенные поды и сервисы в production нэймспэйсе:  
+Все поды в prod:  
 ```
-root@vagrant:~/kub13-1/13-kubernetes-config# kubectl get pods -n production -o wide
-NAME                        READY   STATUS    RESTARTS   AGE     IP               NODE    NOMINATED NODE   READINESS GATES
-backend-58c8869d57-fjqw9    1/1     Running   0          2m40s   10.233.71.19     node3   <none>           <none>
-db-0                        1/1     Running   0          2m40s   10.233.102.151   node1   <none>           <none>
-frontend-55866fb786-gp7hb   1/1     Running   0          2m40s   10.233.74.82     node4   <none>           <none>
-root@vagrant:~/kub13-1/13-kubernetes-config#
-root@vagrant:~/kub13-1/13-kubernetes-config# kubectl get services -n production -o wide
-NAME       TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE     SELECTOR
-backend    NodePort   10.233.5.194    <none>        9000:30449/TCP   2m47s   apps=backend
-db         NodePort   10.233.9.60     <none>        5432:30634/TCP   2m46s   dbs=db
-frontend   NodePort   10.233.26.160   <none>        8000:32069/TCP   2m47s   apps=frontend
+root@vagrant:~/kub13-4#
+root@vagrant:~/kub13-4# kubectl get all -n prod
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/mynginx-8499df9986-vwnmt   1/1     Running   0          3m54s
+
+NAME              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/mynginx   ClusterIP   10.233.55.14   <none>        80/TCP    3m54s
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mynginx   1/1     1            1           3m54s
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/mynginx-8499df9986   1         1         1       3m54s
+root@vagrant:~/kub13-4#
+
 ```
-Всё запустилось.  
+
+Видно, что все поды запущены.  
+
+Проверим версии nginx:  
+```
+root@vagrant:~/kub13-4#
+root@vagrant:~/kub13-4# curl -sI 10.233.25.0 | grep Server:
+Server: nginx/1.23.1
+root@vagrant:~/kub13-4#
+root@vagrant:~/kub13-4# curl -sI 10.233.22.115 | grep Server:
+Server: nginx/1.22.1
+root@vagrant:~/kub13-4#
+root@vagrant:~/kub13-4#
+root@vagrant:~/kub13-4# curl -sI 10.233.55.14 | grep Server:
+Server: nginx/1.22.1
+root@vagrant:~/kub13-4#
+```
+
+Видно, что в неймспэйсе stage запущены приложения с двумя разными версиями: 1.23.1 и 1.22.1  
+в неймспэйсе prod только одна: 1.22.1.  

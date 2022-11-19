@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appname  }}
+  labels:
+    app: {{ .Values.appname  }}
+  namespace: {{ .Values.nsname  }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appname }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appname }}
+    spec:
+      containers:
+        - name: {{ .Values.imgname }}
+          image: "{{ .Values.imgname }}:{{ .Values.imgtag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: {{ .Values.appPort }}
+              protocol: TCP
