@@ -1,6 +1,6 @@
 ## Задание 1: подготовить helm чарт для приложения  
 Подготовили небольшой Helm chart: myapp, на примере образа nginx:
-myapp [myapp]https://github.com/Danil054/devops-netology/blob/main/kub/13-4/myapp)  
+[myapp](https://github.com/Danil054/devops-netology/blob/main/kub/13-4/myapp)  
 
 ##Задание 2: запустить 2 версии в разных неймспейсах
 Запустим установку приложения в первом нэймспейсе (stage), для двух разных версий, командами:  
