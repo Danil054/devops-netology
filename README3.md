@@ -1,6 +1,6 @@
 ## Задача 1: Работа с картами конфигураций через утилиту kubectl  
 
-# Создать карту конфигураций:  
+### Создать карту конфигураций:  
 ```
 root@vagrant:~/kub14-3# kubectl create configmap nginx-config --from-file=nginx.conf
 configmap/nginx-config created
@@ -10,7 +10,7 @@ root@vagrant:~/kub14-3# kubectl create configmap domain --from-literal=name=neto
 configmap/domain created
 ```
 
-# Просмотреть список карт конфигураций:  
+### Просмотреть список карт конфигураций:  
 ```
 root@vagrant:~/kub14-3# kubectl get configmaps
 NAME               DATA   AGE
@@ -20,7 +20,7 @@ nginx-config       1      3m11s
 root@vagrant:~/kub14-3#
 ```
 
-# Просмотреть карту конфигурации:  
+### Просмотреть карту конфигурации:  
 ```
 root@vagrant:~/kub14-3# kubectl get configmap nginx-config
 NAME           DATA   AGE
@@ -47,7 +47,7 @@ Events:  <none>
 root@vagrant:~/kub14-3#
 ```
 
-# Получить информацию в формате YAML и/или JSON:  
+### Получить информацию в формате YAML и/или JSON:  
 ```
 root@vagrant:~/kub14-3# kubectl get configmap nginx-config -o yaml
 apiVersion: v1
@@ -91,7 +91,7 @@ root@vagrant:~/kub14-3# kubectl get configmap domain -o json
 root@vagrant:~/kub14-3#
 ```
 
-# Выгрузить карту конфигурации и сохранить его в файл:  
+### Выгрузить карту конфигурации и сохранить его в файл:  
 ```
 root@vagrant:~/kub14-3# kubectl get configmaps -o json > configmaps.json
 root@vagrant:~/kub14-3#
@@ -99,17 +99,16 @@ root@vagrant:~/kub14-3# kubectl get configmap nginx-config -o yaml > nginx-confi
 root@vagrant:~/kub14-3#
 ```
 
-# Удалить карту конфигурации:  
+### Удалить карту конфигурации:  
 ```
 root@vagrant:~/kub14-3# kubectl delete configmap nginx-config
 configmap "nginx-config" deleted
 root@vagrant:~/kub14-3#
 ```
 
-# Загрузить карту конфигурации из файла:  
+### Загрузить карту конфигурации из файла:  
 ```
 root@vagrant:~/kub14-3# kubectl apply -f nginx-config.yml
 configmap/nginx-config created
 root@vagrant:~/kub14-3#
 ```
-
