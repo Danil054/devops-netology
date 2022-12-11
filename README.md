@@ -1,68 +1,31 @@
-## Задача 1: Работа с сервис-аккаунтами через утилиту kubectl  
+## Задание 1. Яндекс.Облако  
 
-Создать сервис-аккаунт:
+Подготовили манифесты для Terraform [terraform files](https://github.com/Danil054/devops-netology/blob/main/15-1/terraform15-1/)  
+- [main.tf](https://github.com/Danil054/devops-netology/blob/main/15-1/terraform15-1/main.tf):  
+Задаём провайдера и зону доступности.  
+Переменные для доступа к облаку экспортированы в окружение:  
 ```
-vagrant@vagrant:~/kub14-4$ kubectl create serviceaccount netology
-serviceaccount/netology created
-vagrant@vagrant:~/kub14-4$ 
-```
-
-Просмотреть список сервис-акаунтов:
-```
-vagrant@vagrant:~/kub14-4$ kubectl get serviceaccounts
-NAME                                SECRETS   AGE
-default                             0         77d
-netology                            0         106s
-nfs-server-nfs-server-provisioner   0         7d22h
-vagrant@vagrant:~/kub14-4$ 
+export YC_TOKEN=$(yc iam create-token)
+export YC_CLOUD_ID=$(yc config get cloud-id)
+export YC_FOLDER_ID=$(yc config get folder-id)
 ```
 
-Получить информацию в формате YAML и/или JSON:
-```
-vagrant@vagrant:~/kub14-4$ kubectl get serviceaccount netology -o yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  creationTimestamp: "2022-11-27T10:00:16Z"
-  name: netology
-  namespace: default
-  resourceVersion: "305885"
-  uid: e0b642e4-2b39-4ccc-9eef-917a2570b0f8
-vagrant@vagrant:~/kub14-4$ 
-```
-```
-vagrant@vagrant:~/kub14-4$ kubectl get serviceaccount default -o json
-{
-    "apiVersion": "v1",
-    "kind": "ServiceAccount",
-    "metadata": {
-        "creationTimestamp": "2022-09-10T14:51:31Z",
-        "name": "default",
-        "namespace": "default",
-        "resourceVersion": "316",
-        "uid": "842cae6a-8b98-49b7-a351-505c1861a27d"
-    }
-}
-vagrant@vagrant:~/kub14-4$ 
-```
+- [rtb.tf](https://github.com/Danil054/devops-netology/blob/main/15-1/terraform15-1/rtb.tf):  
+Задаём таблицу маршрутизации  
 
-Выгрузить сервис-акаунты и сохранить его в файл:
-```
-vagrant@vagrant:~/kub14-4$ kubectl get serviceaccounts -o json > serviceaccounts.json
-vagrant@vagrant:~/kub14-4$ kubectl get serviceaccount netology -o yaml > netology.yml
-vagrant@vagrant:~/kub14-4$ 
-```
+- [vpc.tf](https://github.com/Danil054/devops-netology/blob/main/15-1/terraform15-1/vpc.tf):  
+Создаём vpc и подсети, сопоставляем таблицу маршрутизации с подсетью private  
 
-Удалить сервис-акаунт:
-```
-vagrant@vagrant:~/kub14-4$ kubectl delete serviceaccount netology
-serviceaccount "netology" deleted
-vagrant@vagrant:~/kub14-4$ 
-```
+- [vms.tf](https://github.com/Danil054/devops-netology/blob/main/15-1/terraform15-1/vms.tf):  
+Создаём ВМ, одна для NAT, и по одной в каждой подсети  
 
-Загрузить сервис-акаунт из файла:
-```
-vagrant@vagrant:~/kub14-4$ kubectl apply -f netology.yml
-serviceaccount/netology created
-vagrant@vagrant:~/kub14-4$ 
-```
+В результате выполнения terraform apply,  
+в Яндекс облаке создались необходимые [подсети](https://github.com/Danil054/devops-netology/blob/main/15-1/pics/subnets-yc.png)  
+и [виртуальные машины](https://github.com/Danil054/devops-netology/blob/main/15-1/pics/vms-yc.png)  
+
+На [скриншоте](https://github.com/Danil054/devops-netology/blob/main/15-1/pics/ping-curl.png) видно,  
+что ВМ из private сети имеет доступ в интернет, и выходит в него под внешним IP адресом нашей ВМ для NAT.
+
+
+
+
