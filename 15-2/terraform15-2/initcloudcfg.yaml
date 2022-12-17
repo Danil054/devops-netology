@@ -1,0 +1,4 @@
+#cloud-config
+runcmd:
+  - [ bash, -c, "echo \"<html><body><h1>`echo $(hostname -I)`</h1><p><img src='http://dan054s3-bucket.storage.yandexcloud.net/img1.png'></p></body></html>\" > /var/www/html/index.html" ]
+
