@@ -1,0 +1,1 @@
+yc managed-kubernetes cluster get-credentials kub-cls-1 --external
